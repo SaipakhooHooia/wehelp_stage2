@@ -16,7 +16,7 @@ mydb = mysql.connector.connect(
     database="website"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
@@ -44,29 +44,19 @@ class Page_content(BaseModel):
     transport: str
     lat: float
     lng: float
-    mrt: str
+    mrt: Optional[str] = None
     images: List[HttpUrl]
     
 
 class Response_list(BaseModel):
-	next_page: int
+	nextPage: Optional[int] = None
 	data: List[Page_content]
 
 class Response_model(BaseModel):
 	data: Page_content
 
-class Error_message(BaseModel):
-	error: bool
-	message: str
-
 class Station_spot(BaseModel):
 	data: List[str]
-
-mycursor.execute("SELECT COUNT(*) FROM website.turist_spot")
-total_records = mycursor.fetchone()[0]
-records_per_page = 12
-page = 1 
-max_page = math.ceil(total_records / records_per_page)
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
@@ -90,43 +80,61 @@ async def custom_validation_exception_handler(request: Request, exc: RequestVali
         content={"error": True, "message": "請求參數錯誤"}
     )
 
+records_per_page = 12
 @app.get("/api/attractions", response_model=Response_list)
-async def api_attract(page: int = Query(lt = max_page+1, ge = 0), keyword: Optional[str] = Query(None)):
-        if keyword:
-            sql = """
-            SELECT id, name, category, description, address, transport, mrt, lat, lng, image
-            FROM turist_spot 
-            WHERE name LIKE %s 
-            """
-            values = ('%' + keyword + '%',)
-            mycursor.execute(sql, values)
-        else:
-            offset = (page - 1) * records_per_page
-            sql = """
-            SELECT id, name, category, description, address, transport, mrt, lat, lng, image
-            FROM turist_spot 
-            LIMIT %s OFFSET %s
-            """
-            mycursor.execute(sql, (records_per_page, offset))
-        
+async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Query(None)):
+    if keyword:
+        mycursor.execute("SELECT COUNT(*) FROM website.turist_spot WHERE name LIKE %s", ('%' + keyword + '%',))
+        total_records = mycursor.fetchone()[0]
+        max_page = math.ceil(total_records / records_per_page)-1
+        print("max_page=",max_page)
+        offset = page * records_per_page
+        sql = """
+        SELECT id, name, category, description, address, transport, mrt, lat, lng, image
+        FROM turist_spot 
+        WHERE name LIKE %s 
+        LIMIT %s OFFSET %s
+        """
+        values = (('%' + keyword + '%'),records_per_page, offset)
+        mycursor.execute(sql, values)
+        rows = mycursor.fetchall()
+    else:
+        mycursor.execute("SELECT COUNT(*) FROM website.turist_spot")
+        total_records = mycursor.fetchone()[0]
+        max_page = math.ceil(total_records / records_per_page)-1
+        print("max_page=",max_page)
+        offset = page * records_per_page
+        sql = """
+        SELECT id, name, category, description, address, transport, mrt, lat, lng, image
+        FROM turist_spot 
+        LIMIT %s OFFSET %s
+        """
+        mycursor.execute(sql, (records_per_page, offset))
         rows = mycursor.fetchall()
 
-        results = [
-            Page_content(
-                id=row[0],
-                name=row[1],
-                category=row[2],
-                description=row[3],
-                address=row[4],
-                transport=row[5],
-                mrt=row[6],
-                lat=row[7],
-                lng=row[8],
-                images=json.loads(row[9])
-            ) for row in rows
-        ]
+    results = [
+        Page_content(
+            id=row[0],
+            name=row[1],
+            category=row[2],
+            description=row[3],
+            address=row[4],
+            transport=row[5],
+            mrt=row[6],
+            lat=row[7],
+            lng=row[8],
+            images=json.loads(row[9])
+        ) for row in rows
+    ]
+		
+    if page == max_page:
+        nextPage = None
+    elif page < max_page:
+        nextPage = page +1 
+    elif page > max_page:
+        raise HTTPException(status_code = 500)
 
-        return Response_list(next_page = page+1, data = results)
+    return Response_list(nextPage = nextPage, data = results)
 
 @app.get("/api/attraction/{attractionId}", response_model=Response_model)
 async def api_attractid(attractionId: int = Path(...)):
