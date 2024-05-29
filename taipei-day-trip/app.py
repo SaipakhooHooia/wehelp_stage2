@@ -91,7 +91,7 @@ async def custom_validation_exception_handler(request: Request, exc: RequestVali
     )
 
 @app.get("/api/attractions", response_model=Response_list)
-async def api_attract(page: int = Query(lt = max_page+1, gt = 0), keyword: Optional[str] = Query(None)):
+async def api_attract(page: int = Query(lt = max_page+1, ge = 0), keyword: Optional[str] = Query(None)):
         if keyword:
             sql = """
             SELECT id, name, category, description, address, transport, mrt, lat, lng, image
