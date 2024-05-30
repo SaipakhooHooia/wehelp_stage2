@@ -86,7 +86,7 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
     if keyword:
         mycursor.execute("SELECT COUNT(*) FROM website.turist_spot WHERE name LIKE %s", ('%' + keyword + '%',))
         total_records = mycursor.fetchone()[0]
-        max_page = math.ceil(total_records / records_per_page)
+        max_page = math.ceil(total_records / records_per_page)-1
         print("max_page=",max_page)
         offset = page * records_per_page
         sql = """
@@ -101,7 +101,7 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
     else:
         mycursor.execute("SELECT COUNT(*) FROM website.turist_spot")
         total_records = mycursor.fetchone()[0]
-        max_page = math.ceil(total_records / records_per_page)
+        max_page = math.ceil(total_records / records_per_page)-1
         print("max_page=",max_page)
         offset = page * records_per_page
         sql = """
@@ -126,13 +126,11 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
             images=json.loads(row[9])
         ) for row in rows
     ]
-		
-    if page == max_page:
-        nextPage = None
-    elif page < max_page:
-        nextPage = page +1 
-    elif page > max_page:
-        raise HTTPException(status_code = 500)
+
+    if page < max_page:
+          nextPage = page +1
+    else :
+          nextPage = None
 
     return Response_list(nextPage = nextPage, data = results)
 
