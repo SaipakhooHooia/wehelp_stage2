@@ -84,9 +84,10 @@ records_per_page = 12
 @app.get("/api/attractions", response_model=Response_list)
 async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Query(None)):
     if keyword:
-        mycursor.execute("SELECT COUNT(*) FROM website.turist_spot WHERE name LIKE %s", ('%' + keyword + '%',))
+        mycursor.execute("SELECT COUNT(*) FROM website.turist_spot WHERE name LIKE %s OR mrt LIKE %s", ('%' + keyword + '%','%' + keyword + '%'))
         total_records = mycursor.fetchone()[0]
-        max_page = math.ceil(total_records / records_per_page)-1
+        max_page = math.ceil(total_records / float(records_per_page)) -1
+        print("total_records=",total_records)
         print("max_page=",max_page)
         offset = page * records_per_page
         sql = """
@@ -101,7 +102,8 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
     else:
         mycursor.execute("SELECT COUNT(*) FROM website.turist_spot")
         total_records = mycursor.fetchone()[0]
-        max_page = math.ceil(total_records / records_per_page)-1
+        max_page = math.ceil(total_records / float(records_per_page)) -1
+        print("total_records=",total_records)
         print("max_page=",max_page)
         offset = page * records_per_page
         sql = """
@@ -127,10 +129,12 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
         ) for row in rows
     ]
 
-    if page < max_page:
-          nextPage = page +1
-    else :
+    if page < max_page :
+          nextPage = page+1
+    elif page == max_page :
           nextPage = None
+    else:
+          raise HTTPException(status_code = 500)
 
     return Response_list(nextPage = nextPage, data = results)
 
