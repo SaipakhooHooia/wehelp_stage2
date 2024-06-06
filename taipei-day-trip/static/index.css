@@ -13,7 +13,7 @@
     justify-content: space-between;
     align-items: center; 
     margin:5px; 
-    width:1200px; 
+    max-width: 1200px;
     height: 54px;
     margin-right: auto;
     margin-left: auto;
@@ -121,7 +121,7 @@
     font-size: 16px; 
     display: block;
     flex:auto;
-    align-items: center;
+    align-self: center;
     font-family:"Noto Sans TC", sans-serif;
     font-weight: 500;
     color: #666666;
@@ -130,10 +130,10 @@
 }
 
 .headline-content{
-    width:1200px; 
-    margin-right:auto;
-    margin-left:auto;
+    width: 1200px;
     padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .headline-div1{
@@ -175,13 +175,13 @@
 
 .content-container{
     padding:40px 0px 40px 0px;
-    width: 1200px; 
+    max-width: 1200px;
     margin-left: auto; 
     margin-right: auto;
 }
 
 .attractions{
-    width: 1200px;
+    max-width: 1200px;
     margin: 15px;
     margin-left: auto; 
     margin-right: auto;
@@ -191,7 +191,7 @@
 .slider{
     padding:0px 0px 20px 0px; 
     display: flex; 
-    width: 1200px; 
+    max-width: 1200px;
     height:70px; 
     align-items: center;
     box-sizing: border-box;
@@ -229,12 +229,13 @@
     height: 320px;
     font-size: 40px;
     font-weight: bold;
-    justify-content: center;
     align-items: center;
     height:250px;
     display: flex;
     background-image: url("/static/welcome.png");
     color: #f9f9f9;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .title{
     height: 40px;
@@ -330,7 +331,7 @@
 }
 
 .footer{
-    width: 100vw;
+    width: 100%;
     height: 104px;
     background-color: #757575;
     display:flex;
@@ -369,12 +370,13 @@ body{margin:0px}
     .navibar{
         justify-content: space-between;
     }
-    .pic_list,.headline-content{
-        flex-wrap: wrap;
+
+    .taipei-trip{
+        margin: 10px;
     }
 
-    .headline{
-        background-size: cover;
+    .pic_list,.headline-content{
+        flex-wrap: wrap;
     }
 
     .picture-container{
@@ -385,10 +387,19 @@ body{margin:0px}
         width: auto;
     }
 
-    .content-container, .slider, .attractions, .navibar{
-        width:90vw;
+    .content-container, .navibar{
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .headline-content{
+        max-width: 90%;
+        margin-right: auto;
+    }
+
+    .slider, .attractions{
+        max-width: 100%;
     }
 
     .pic_list{
@@ -403,33 +414,31 @@ body{margin:0px}
     }
 }
 
-@media(max-width:800px){
+@media(max-width:900px){
     .pic_list{
         grid-template-columns: 1fr 1fr;
     }
+
+    .content-container, .slider, .attractions, .navibar{
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
-@media(max-width:500px){/*手機的螢幕寬度最大為500，最小為360px*/
+@media(max-width:600px){/*手機的螢幕寬度最大為500，最小為360px*/
     .pic_list{
         flex-wrap: wrap;
     }
-    
+
     .content-container, .slider, .attractions, .navibar{
-        width:97.7777777778vw;
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
     }
 
-    .navibar{
-        margin: 10px;
-    }
-
     .content-container{
         padding:20px 0px 20px 0px;
-    }
-
-    .headline{
-        background-size: cover;
     }
 
     .pic_list{
@@ -457,6 +466,6 @@ body{margin:0px}
 
     .picture, .picture-container{
         height: 235px;
-        width: 89.444444444vw;
+        /*width: 89.444444444vw;*/
     }
 }

@@ -35,7 +35,7 @@ fetch("/api/mrts")
   })
   .catch(error => console.log(`Error: ${error}`));
 
-const scrollDistance = window.innerWidth > 1000 ? 800 : 200; // 如果螢幕寬度大於600px，滾動800px，否則滾動500px
+const scrollDistance = window.innerWidth > 800 ? 600 : 100; // 如果螢幕寬度大於600px，滾動800px，否則滾動500px
 
 document.querySelector('.left-arrow').addEventListener('mousedown', () => {
   document.querySelector('.slides').scrollBy({ left: -scrollDistance, behavior: 'smooth' });
