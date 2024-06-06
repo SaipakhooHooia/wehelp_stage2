@@ -7,8 +7,12 @@ import json
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 import math
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 
 app=FastAPI()
+
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -16,7 +20,15 @@ mydb = mysql.connector.connect(
     database="website"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+)
+
 mycursor = mydb.cursor(buffered=True)
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="static")
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
