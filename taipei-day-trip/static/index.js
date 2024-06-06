@@ -164,7 +164,13 @@ function loadContent(data) {
     whiteBox.className = "white-box"
     let mrtBox = document.createElement("div");
     mrtBox.className = "mrtBox";
-    let mrtStation = document.createTextNode(item.mrt);
+    let mrtStation;
+    if (!item.mrt){
+      mrtStation = document.createTextNode("");
+    }
+    else{
+      mrtStation = document.createTextNode(item.mrt);
+    }
     mrtBox.appendChild(mrtStation);
     let catBox = document.createElement("div");
     catBox.className = "catBox";
