@@ -62,7 +62,7 @@
     background-color: transparent;
 }
 
-.left-arrow:hover {
+.left-arrow:hover, .menu:hover , .mrtBox:hover, .catBox:hover{
     opacity: 0.5;
 }
 
@@ -323,6 +323,10 @@
     background-image: url("/static/btn.png");
     border: 0px;
     cursor: pointer;
+}
+
+.searchbutton:hover{
+    opacity: 0.85;
 }
 
 .phone-menu{
