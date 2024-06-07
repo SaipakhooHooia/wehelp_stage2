@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Path, Query, HTTPException
+from fastapi import FastAPI, Request, Path, Query, HTTPException, Depends
 from fastapi.responses import FileResponse, JSONResponse
 import mysql.connector
 from pydantic import BaseModel, HttpUrl
@@ -10,22 +10,34 @@ import math
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+from mysql.connector.pooling import MySQLConnectionPool
 
 app=FastAPI()
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="test",
-    database="website"
-)
+mydb = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'test',
+    'database': 'website'
+    }
+
+pool = MySQLConnectionPool(pool_name="mypool", pool_size=5, **mydb)
+
+def get_db_conn():
+    connection = pool.get_connection()
+    mycursor = connection.cursor(buffered=True)
+    try:
+        yield mycursor
+    finally:
+        mycursor.close()
+        connection.close()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
 )
 
-mycursor = mydb.cursor(buffered=True)
+#mycursor = mydb.cursor(buffered=True)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="static")
@@ -94,7 +106,7 @@ async def custom_validation_exception_handler(request: Request, exc: RequestVali
 
 records_per_page = 12
 @app.get("/api/attractions", response_model=Response_list)
-async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Query(None)):
+async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Query(None), mycursor=Depends(get_db_conn)):
     if keyword:
         mycursor.execute("SELECT COUNT(*) FROM website.turist_spot WHERE name LIKE %s OR mrt LIKE %s", ('%' + keyword + '%','%' + keyword + '%'))
         total_records = mycursor.fetchone()[0]
@@ -151,7 +163,7 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
     return Response_list(nextPage = nextPage, data = results)
 
 @app.get("/api/attraction/{attractionId}", response_model=Response_model)
-async def api_attractid(attractionId: int = Path(...)):
+async def api_attractid(attractionId: int = Path(...), mycursor=Depends(get_db_conn)):
 	sql = """
 		SELECT id, name, category, description, address, transport, mrt, lat, lng, image 
 		FROM turist_spot 
@@ -181,7 +193,7 @@ async def api_attractid(attractionId: int = Path(...)):
 		raise HTTPException(status_code = 500)
 
 @app.get("/api/mrts", response_model=Station_spot)
-async def api_mrts():
+async def api_mrts(mycursor=Depends(get_db_conn)):
     sql = """
         SELECT mrt_station
         FROM website.turist_spot_mrt

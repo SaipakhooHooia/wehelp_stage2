@@ -1,0 +1,475 @@
+@import url('https://fonts.googleapis.com/earlyaccess/notosanstc.css');
+
+@font-face {
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    src: url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff2') format('woff2'),
+         url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff') format('woff'),
+         url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.otf') format('opentype');
+}
+  
+.navibar{
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    margin:5px; 
+    max-width: 1200px;
+    height: 54px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.taipei-trip{
+    margin-right: auto;
+    display: flex;
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: 700;
+    color: #448899;
+    font-family:"Noto Sans TC", sans-serif;
+    float: left;
+    left: 10px;
+}
+
+.left-container{
+    width: 47px;
+    height: 50px;
+    padding: 9px 0px 9px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    object-fit: contain;
+}
+
+.right-container{
+    width: 47px;
+    height: 50px;
+    padding: 9px 15px 9px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    object-fit: contain;
+}
+
+.left-arrow{
+    width: 32px;
+    height: 32px;
+    background-image: url("/static/left container_default.png");
+    background-size: contain;
+    background-position: center;
+    border: none; 
+    outline: none; 
+    background-color: transparent;
+}
+
+.left-arrow:hover, .menu:hover , .mrtBox:hover, .catBox:hover{
+    opacity: 0.5;
+}
+
+.right-arrow{
+    width: 32px;
+    height: 32px;
+    background-image: url("/static/right container_default.png");
+    background-size: contain;
+    background-position: center;
+    border: none; 
+    outline: none; 
+    background-color: transparent;
+}
+
+.right-arrow:hover {
+    opacity: 0.5;
+}
+
+.slide-container{
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+    display: flex;
+    padding: 13px 10px 13px 10px;
+    align-self: center;
+    box-sizing: border-box;
+}
+
+.slide{
+    display: flex;
+    white-space: nowrap;
+    padding: 5px 15px 5px 15px;
+    margin-right: 4px;
+    font-family:"Noto Sans TC", sans-serif;
+    font-weight: 500;
+    color: #000000;
+    align-self: center;
+    cursor: pointer;
+}
+
+.slide:hover{
+    opacity: 0.5;
+}
+
+.menu-bar{
+    margin-left: auto;
+    display: flex; 
+    width:175px; 
+    height:34px; 
+    align-items: center;
+    float: right;
+}
+
+.menu{
+    height: 14px;
+    font-size: 16px; 
+    display: block;
+    flex:auto;
+    align-self: center;
+    font-family:"Noto Sans TC", sans-serif;
+    font-weight: 500;
+    color: #666666;
+    line-height: 13.3px;
+    text-align: center;
+}
+
+.headline-content{
+    width: 1200px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.headline-div1{
+    display:block;
+    color: #F8F8F8; 
+    font-size: 28px; 
+    line-height: 24px; 
+    font-weight: 700;
+    font-family:"Noto Sans TC", sans-serif;
+    padding: 10px;
+}
+
+.headline-div2{
+    display:block;
+    color: #F8F8F8; 
+    font-size: 16px; 
+    line-height: 13.3px; 
+    font-weight: 700;
+    font-family:"Noto Sans TC", sans-serif;
+    padding: 10px;
+}
+
+.headline-div3{
+    display: flex;
+    padding: 10px;
+}
+
+.searchbar{
+    width: 400px;
+    height: 46px;
+    box-sizing: border-box;
+    font-size: 20px;
+    color: #666666;
+    border: 1px solid;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0px 0px 20px 0px #AABBCC;
+}
+
+.content-container{
+    padding:40px 0px 40px 0px;
+    max-width: 1200px;
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+.attractions{
+    max-width: 1200px;
+    margin: 15px;
+    margin-left: auto; 
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.slider{
+    padding:0px 0px 20px 0px; 
+    display: flex; 
+    max-width: 1200px;
+    height:70px; 
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.pic_list{
+    display:grid;
+    width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap:30px;
+    grid-row-gap:30px;
+    justify-content: space-between;/*平均分配寬度，第一項和最後一項貼齊邊緣*/
+    box-sizing: border-box;
+}
+
+.picture{
+    display: flex;
+    justify-content: flex-end; 
+    align-items: flex-start; 
+    width:100%;
+    height: 197px; 
+    position: relative; 
+    background-size: cover;
+    background-position: center;
+    margin-top: auto;
+    margin-left:auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    object-fit: cover;
+    box-sizing: border-box;
+}
+.headline{
+    height: 320px;
+    font-size: 40px;
+    font-weight: bold;
+    align-items: center;
+    height:250px;
+    display: flex;
+    background-image: url("/static/welcome.png");
+    color: #f9f9f9;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.title{
+    height: 40px;
+    box-sizing: border-box;
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    padding:10px;
+    background-color: rgba(25, 25, 25, 0.544);
+    margin-left: auto; /* 在 Flexbox 中使用 margin 來實現自動填滿空間 */
+    margin-right: auto; /* 在 Flexbox 中使用 margin 來實現自動填滿空間 */
+    white-space: nowrap;
+    text-overflow: ellipsis;/*將多餘的文字用...代替*/
+    overflow:hidden;
+    font-weight: bold;
+    color:#ffffff;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.301);
+}
+
+.title span {
+    /*
+    display: flex;
+    align-items: center;
+    justify-content: center;*/
+    font-weight: 500;
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    line-height: 13.3px;
+
+  }
+
+.white-box {
+    background-color: #FFFFFF; 
+    width: 100%; 
+    box-sizing: border-box;
+    height: 45px; 
+    gap: 4px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.big-container{
+    border: 1px solid ;
+    color:#E8E8E8;
+    border-radius: 5px;
+    height: 242px;
+    width: 270px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.picture-container{
+    height: 197px;
+    width: 270px;
+}
+
+.mrtBox{
+    position: relative;
+    float: left;
+    color: #757575;
+    font-weight: 500;
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    line-height: 13.3px;
+    align-self: center;
+}
+
+.catBox{
+    position: relative;
+    float: right;
+    color: #757575;
+    font-weight: 500;
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    line-height: 13.3px;
+    align-self: center;
+}
+.searchbutton{
+    width: 60px;
+    height: 46px;
+    box-sizing: border-box;
+    background-image: url("/static/btn.png");
+    border: 0px;
+    cursor: pointer;
+}
+
+.searchbutton:hover{
+    opacity: 0.85;
+}
+
+.phone-menu{
+    display:none;
+    text-align: center;
+}
+
+.footer{
+    width: 100%;
+    height: 104px;
+    background-color: #757575;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content-container{
+    width: 234px;
+    height:24px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content{
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    text-align: left;
+    color: #FFFFFF;
+    width: 234px;
+    height: 14px;
+    top: 5px;
+}
+
+body{margin:0px}
+.dropdown-content{
+    display:none;
+}
+
+/*以上稱為電腦版設計，以下media部分為平板和手機板設計*/
+
+@media(max-width:1200px){
+    .navibar{
+        justify-content: space-between;
+    }
+
+    .taipei-trip{
+        margin: 10px;
+    }
+
+    .pic_list,.headline-content{
+        flex-wrap: wrap;
+    }
+
+    .picture-container{
+        width: 100%;
+    }
+
+    .picture, .big-container{
+        width: auto;
+    }
+
+    .content-container, .navibar{
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .headline-content{
+        max-width: 90%;
+        margin-right: auto;
+    }
+
+    .slider, .attractions{
+        max-width: 100%;
+    }
+
+    .pic_list{
+        display:grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-row-gap:20px;
+        justify-content: center;
+        margin-top: auto;
+        width:100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media(max-width:900px){
+    .pic_list{
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .content-container, .slider, .attractions, .navibar{
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media(max-width:600px){/*手機的螢幕寬度最大為500，最小為360px*/
+    .pic_list{
+        flex-wrap: wrap;
+    }
+
+    .content-container, .slider, .attractions, .navibar{
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .content-container{
+        padding:20px 0px 20px 0px;
+    }
+
+    .pic_list{
+        display:grid;
+        grid-template-columns: 1fr;
+        grid-row-gap:20px;
+        justify-content: center;
+        margin-top: auto;
+        width:100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .searchbar{
+        width: 225px;
+        height: 46px;
+    }
+
+    .big-container{
+        height: 280px;
+        width: 89.444444444vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .picture, .picture-container{
+        height: 235px;
+        /*width: 89.444444444vw;*/
+    }
+}
