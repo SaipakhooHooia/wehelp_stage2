@@ -193,7 +193,7 @@ function loadContent(data) {
 
   for (let i = 0; i < image_url.length; i++) {
     let container = document.querySelectorAll(".pic_list .picture")[i];
-    container.style.backgroundImage = 'url(' + image_url[i] + ')' || '';
+    container.style.backgroundImage = 'url(' + image_url[i] + ')' || '';//如果image_url[i]地直不存在，就返回空
   }
   for (let i = 0; i < turist_spot.length; i++) {
     let element = document.querySelectorAll('.pic_list .title')[i];
