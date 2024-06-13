@@ -1,0 +1,740 @@
+@import url('https://fonts.googleapis.com/earlyaccess/notosanstc.css');
+
+@font-face {
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.woff2') format('woff2'),
+         url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.woff') format('woff'),
+         url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    src: url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff2') format('woff2'),
+         url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.woff') format('woff'),
+         url('https://fonts.gstatic.com/ea/notosanstc/v1/NotoSansTC-Bold.otf') format('opentype');
+}
+
+body {
+    font-family: "Noto Sans TC", sans-serif;
+    margin: 0px;
+}
+
+.navibar {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    margin: 5px; 
+    max-width: 1200px;
+    height: 54px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.taipei-trip {
+    margin-right: auto;
+    display: flex;
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: 700;
+    color: #448899;
+    font-family: "Noto Sans TC", sans-serif;
+    float: left;
+    margin: 10px;
+    cursor: pointer;
+}
+
+/* Ensure all elements that should have font-weight 700 */
+.form-header, .form-group1 > div, .form-group2 > div, .form-group3 > div {
+    font-weight: 700;
+}
+
+.menu:hover , .mrtBox:hover, .catBox:hover, .picture-container:hover, 
+.attraction-left-arrow:hover, .attraction-right-arrow:hover, .calendar-button:hover,
+.submit-button:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.footer {
+    width: 100%;
+    height: 104px;
+    background-color: #757575;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content-container {
+    width: 234px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content {
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    text-align: left;
+    color: #FFFFFF;
+    width: 234px;
+    height: 14px;
+    top: 5px;
+}
+
+.calender-area {
+    display: flex;
+    height: 35px;
+    width: 193px;
+    background-color: #FFFFFF;
+    align-items: center;
+    justify-content: center;
+}
+/*
+.calendar-button {
+    background-image: url("/static/icon_calendar.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+}*/
+
+.attraction-left-arrow, .attraction-right-arrow {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.attraction-left-arrow {
+    left: 10px;
+    background-image: url('/static/left arrow.png');
+    background-size: cover;
+}
+
+.attraction-right-arrow {
+    right: 10px;
+    background-image: url('/static/right arrow.png');
+    background-size: cover;
+}
+
+hr {
+    height: 1px; 
+    border: none; 
+    background-color: #d7d6d6;
+}
+
+.top-hr{
+    width: 100%;
+}
+
+.bottom-hr{
+    position: relative; 
+    margin-top: 40px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    max-width: 1200px; 
+    width:100%;
+}
+
+.booking-container {
+    position: relative;
+    margin-top: 50px; 
+    max-width: 1200px; 
+    width:100%;
+    display: flex; 
+    height: 400px;
+    left: 50%; 
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.booking-image-container {
+    max-width: 540px;
+    height: 400px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+.booking-image {
+    flex-shrink: 0;
+    width: 540px;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+
+.attraction-content-container {
+    width: 600px;
+    height: 400px;
+}
+
+.attraction-name-container {
+    height: 33px;
+    font-weight: 700;
+    font-size: 24px;
+    color: #666666;
+    line-height: 24px;
+    font-family: "Noto Sans TC", sans-serif;
+}
+
+.cat-container {
+    height: 22px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #666666;
+    line-height: 13.3px;
+    position: absolute;
+    top: 48px;
+    width: 600px;
+    font-family: "Noto Sans TC", sans-serif;
+}
+
+.booking-area {
+    position: absolute;
+    top: 90px;
+    width: 600px;
+    height: 302px;
+    background-color: #E8E8E8;
+}
+
+.form-header, .form-parah, .form-group1, .form-group2, .form-group3 {
+    text-align: left;
+    color: #666666;
+    font-size: 16px;
+    width: 560px;
+    font-family: "Noto Sans TC", sans-serif;
+    align-items: center;
+    display: flex;
+}
+
+.form-header {
+    height: 22px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-weight: 700;
+    line-height: 13.3px;
+}
+
+.form-parah {
+    height: 24px;
+    top: 52px;
+    left: 20px;
+    position: absolute;
+    font-weight: 400; 
+    font-size: 16px;
+    line-height: 13.3px;
+}
+
+.form-group1 {
+    height: 35px;
+    top: 91px;
+    left: 20px;
+    position: absolute;
+    display: flex;
+}
+
+.form-group2 {
+    position: absolute;
+    top: 141px;
+    left: 20px;
+}
+
+.form-group2 label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    display: none;
+}
+
+.form-group2 label:before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    border: none;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    position: relative;
+    z-index: auto;
+}
+
+input[type="radio"]:checked + label:before {
+    background-color: #FFFFFF;
+}
+
+input[type="radio"]:checked + label:after {
+    content: '';
+    width: 18px;
+    height: 18px;
+    background-color: #448899;
+    border-radius: 50%;
+    position: absolute;
+    left: 8px;
+    top: 2px;
+}
+
+#date {
+    height: 25px;
+    width: 149px;
+    border: none;
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 13.3px;
+    text-align: left;
+    outline: none;
+    justify-content: center;
+    display: flex;
+}
+
+#date::placeholder {
+    color: #000000;
+}
+
+.form-group3 {
+    height: 22px;
+    top: 178px;
+    left: 20px;
+    position: absolute;
+    display: flex;
+}
+
+.submit-button {
+    width: auto;
+    height: 36px;
+    top: 225px;
+    left: 20px;
+    align-content: center;
+    border-radius: 5px;
+    position: absolute;
+    background-color: #448899;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: center;
+}
+
+.infors {
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 80px;
+    max-width: 1200px; 
+    width:100%;
+    left: 50%; 
+    transform: translateX(-50%);
+}
+
+.description, .address-header, .address, .transport {
+    color: #666666;
+    margin: 10px;
+    font-size: 16px;
+    text-align: left;
+    font-family: "Noto Sans TC", sans-serif;
+}
+
+.description {
+    position: relative;
+    font-weight: 400;
+    line-height: 23.17px;
+}
+
+.address-header {
+    margin-top: 30px;
+    font-weight: 700;
+    line-height: 13.3px;
+}
+
+.address, .transport {
+    font-weight: 400;
+    line-height: 23.17px;
+}
+
+.menu {
+    height: 14px;
+    font-size: 16px; 
+    display: block;
+    flex: auto;
+    align-self: center;
+    font-family: "Noto Sans TC", sans-serif;
+    font-weight: 500;
+    color: #666666;
+    line-height: 13.3px;
+    text-align: center;
+}
+
+.menu-bar {
+    margin-left: auto;
+    display: flex; 
+    width: 175px; 
+    height: 34px; 
+    align-items: center;
+    float: right;
+}
+
+.image-wrapper{
+    box-sizing: border-box; 
+    height: 400px; 
+    position: relative;
+    display: flex; 
+    justify-content: center;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px; /* 调整这个值以控制圆点距离图片底部的距离 */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+  
+.carousel-indicator {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    margin: 5px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: background-color 0.3s ease; 
+}
+
+.carousel-indicator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #FFFFFF; 
+    transition: background-color 0.3s ease; 
+}
+
+.carousel-indicator.active::before {
+    width: 10px; 
+    height: 10px;
+    background-color: #000000; 
+    border: 2px;
+    border-color: #FFFFFF;
+    opacity: 0.75;
+}
+
+@media(max-width:1200px){
+    .booking-container, .infors{
+        width: 900px;
+        height:auto;
+        margin-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        transform: none;
+        justify-content: space-between;
+    }
+
+    .infors{
+        margin-top: 40px;
+    }
+
+    .image-wrapper{
+        width: 445px;
+    }
+
+    .attraction-content-container, .booking-area{
+        width: 420px;
+    }
+
+    .attraction-content-container{
+        position: initial;
+    }
+
+    .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
+        width: auto;
+    }
+
+    .cat-container{
+        position: initial;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .bottom-hr{
+        width: 100%;
+    }
+
+}
+
+@media(max-width:1000px){
+    .booking-container, .infors{
+        max-width: 900px;
+        width: 100%;
+        height:auto;
+        margin-top: 0px;
+        left: 0;
+        transform: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .infors{
+        margin-top: 40px;
+    }
+
+    .image-wrapper{
+        width: 445px;
+    }
+
+    .attraction-content-container, .booking-area{
+        width: 420px;
+    }
+
+    .attraction-content-container{
+        left: 500px;
+    }
+
+    .cat-container,.form-header, .form-parah, .form-group1, .form-group2, .form-group3{
+        width: auto;
+    }
+
+    .bottom-hr{
+        max-width: 900px;
+        width: 100%;
+    }
+}
+
+
+@media(max-width:900px){
+    .booking-container{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        height:auto;
+        margin-top: 0px;
+        /*
+        margin-left: auto;
+        margin-right: auto;*/
+    }
+
+    .booking-image, .attraction-name-container, .cat-container{
+        width: 100%;
+    }
+
+    .attraction-name-container, .cat-container{
+        justify-content:space-evenly; 
+        display: flex;
+    }
+    
+    .attraction-name-container, .cat-container{
+        position: absolute;
+    }
+
+    .attraction-name-container{
+        top: 10px;
+    }
+
+    .cat-container{
+        top: 48px;
+    }
+
+    .booking-image-container, .booking-image{
+        height: auto;
+        margin-left: 0px;
+        background-size: cover;
+        width: 89.44444vw;
+        max-width: 89.44444vw;
+    }
+
+    .attraction-content-container{
+        width: 100%;
+        height: 390px;
+        position: relative;
+        left: 0px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .image-wrapper{
+        margin: 0px;
+        height: 400px;
+        width: 89.44444vw;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .top-hr{
+        display: none;
+    }
+
+    .bottom-hr{
+        width: 89.44444vw;
+    }
+
+    .attraction-left-arrow, .attraction-right-arrow{
+        align-content: center;
+    }
+
+    .booking-area{
+        width: 89.44444vw;
+        height: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+    }
+
+    .infors{
+        width: 89.44444vw;
+        height: auto;
+    }
+
+    .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
+        max-width: 100%;
+    }
+
+    .form-parah{
+        line-height: 23.17px;
+    }
+}
+
+@media(max-width:500px){
+    .booking-container{
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 100%; 
+        width:100%;
+        height:auto;
+        margin-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .booking-image-container{
+        width: 100%;
+    }
+
+    .booking-image, .attraction-name-container, .cat-container{
+        width: 100%;
+    }
+
+    .attraction-name-container, .cat-container{
+       justify-content: flex-start;
+       display: flex;
+    }
+    
+    .attraction-name-container, .cat-container{
+        position: absolute;
+    }
+
+    .attraction-name-container{
+        top: 10px;
+    }
+
+    .cat-container{
+        margin:0px;
+        top: 48px;
+    }
+
+    .transport{
+        word-break: break-all;
+    }
+
+    .booking-image-container, .booking-image{
+        height: 350px;
+        margin-left: 0px;
+        background-size: cover;
+        max-width: 100%;
+    }
+
+    .attraction-content-container{
+        width: 100%;
+        height: 390px;
+        position: relative;
+        /*left: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        flex-wrap: wrap;
+        display: flex;*/
+    }
+
+    .image-wrapper{
+        margin: 0px;
+        height: 350px;
+        width: 100%;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .top-hr{
+        display: none;
+    }
+
+    .bottom-hr{
+        max-width: calc(100% - 20px); 
+        width: calc(100% - 20px); 
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .attraction-left-arrow, .attraction-right-arrow{
+        top: 50%;
+    }
+
+    .booking-area{
+        width: 100%;
+        height: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+    }
+
+    .infors{
+        max-width: 100%; 
+        width:100%;
+        height: auto;
+        max-width: calc(100% - 20px); 
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 5px;
+        padding-right: 5px;
+        box-sizing: border-box;
+    }
+
+    .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
+        width: 300px;
+    }
+
+    .form-parah{
+        line-height: 23.17px;
+    }
+}

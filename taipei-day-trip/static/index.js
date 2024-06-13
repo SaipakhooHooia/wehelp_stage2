@@ -39,20 +39,11 @@ const scrollDistance = window.innerWidth > 800 ? 600 : 100; // 如果螢幕寬�
 
 document.querySelector('.left-arrow').addEventListener('mousedown', () => {
   document.querySelector('.slides').scrollBy({ left: -scrollDistance, behavior: 'smooth' });
-  document.querySelector('.left-arrow').style.backgroundImage = "url('/static/left container_click.png')";
 });
 
-document.querySelector('.left-arrow').addEventListener('mouseup', () => {
-  document.querySelector('.left-arrow').style.backgroundImage = "url('/static/left container_default.png')";
-});
 
 document.querySelector('.right-arrow').addEventListener('mousedown', () => {
   document.querySelector('.slides').scrollBy({ left: scrollDistance, behavior: 'smooth' });
-  document.querySelector('.right-arrow').style.backgroundImage = "url('/static/right container_click.png')";
-});
-
-document.querySelector('.right-arrow').addEventListener('mouseup', () => {
-  document.querySelector('.right-arrow').style.backgroundImage = "url('/static/right container_default.png')";
 });
 
 // 用左右鍵盤也可以滑動
@@ -189,17 +180,27 @@ function loadContent(data) {
     bigContainer.appendChild(pictureContainer);
     bigContainer.appendChild(whiteBox);
     document.querySelector(".pic_list").appendChild(bigContainer);
+
+    pictureContainer.addEventListener("click",() =>{
+      const attractionId = item.id;
+      window.location.href = `/attraction/${attractionId}`;
+    });
   }
 
   for (let i = 0; i < image_url.length; i++) {
     let container = document.querySelectorAll(".pic_list .picture")[i];
-    container.style.backgroundImage = 'url(' + image_url[i] + ')' || '';//如果image_url[i]地直不存在，就返回空
+    container.style.backgroundImage = 'url(' + image_url[i] + ')' || '';
   }
   for (let i = 0; i < turist_spot.length; i++) {
     let element = document.querySelectorAll('.pic_list .title')[i];
     element.textContent = turist_spot[i] || '';
   }
 }
+
+let taipeiTripButton = document.querySelector(".taipei-trip");
+taipeiTripButton.addEventListener("click",() => {
+    window.location.href = `/`;
+})
 //-------------------------------下面處理刷新時頁面沒有置頂的問題------------------------------------------
 window.setTimeout(function () {
   window.scrollTo(0, 0);
