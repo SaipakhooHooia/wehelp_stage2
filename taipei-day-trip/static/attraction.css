@@ -331,6 +331,7 @@ input[type="radio"]:checked + label:after {
     left: 20px;
     align-content: center;
     border-radius: 5px;
+    border: none;
     position: absolute;
     background-color: #448899;
     color: #FFFFFF;
@@ -652,7 +653,8 @@ input[type="radio"]:checked + label:after {
     }
     
     .attraction-name-container, .cat-container{
-        position: absolute;
+        position: initial;
+        height: auto;
     }
 
     .attraction-name-container{
@@ -660,8 +662,7 @@ input[type="radio"]:checked + label:after {
     }
 
     .cat-container{
-        margin:0px;
-        top: 48px;
+        margin-top: 15px;
     }
 
     .transport{
@@ -715,7 +716,8 @@ input[type="radio"]:checked + label:after {
         height: 300px;
         margin-left: auto;
         margin-right: auto;
-        position: relative;
+        position: absolute;
+        top: 90px;
     }
 
     .infors{
@@ -731,10 +733,33 @@ input[type="radio"]:checked + label:after {
     }
 
     .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
-        width: 300px;
+        width: auto;
+    }
+
+    .form-group1, .form-group2, .form-group3{
+        position: initial;
+        margin-top: 15px;
+        margin-left: 20px;
     }
 
     .form-parah{
+        position: initial;
+        margin-top: 15px;
+        margin-left: 20px;
+        margin-right: 20px;
         line-height: 23.17px;
+        height: auto;
+    }
+
+    .form-header{
+        position: initial;
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+
+    .submit-button{
+        position: initial;
+        margin-top: 25px;
+        margin-left: 20px;
     }
 }
