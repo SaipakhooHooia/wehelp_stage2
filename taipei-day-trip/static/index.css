@@ -29,6 +29,7 @@
     font-family:"Noto Sans TC", sans-serif;
     float: left;
     left: 10px;
+    cursor: pointer;
 }
 
 .left-container{
@@ -54,7 +55,7 @@
 .left-arrow{
     width: 32px;
     height: 32px;
-    background-image: url("/static/left container_default.png");
+    background-image: url("/static/left arrow.png");
     background-size: contain;
     background-position: center;
     border: none; 
@@ -62,14 +63,337 @@
     background-color: transparent;
 }
 
-.left-arrow:hover, .menu:hover , .mrtBox:hover, .catBox:hover{
+.left-arrow:hover, .menu:hover , .mrtBox:hover, .catBox:hover, .picture-container:hover, 
+.right-arrow:hover, .attraction-left-arrow:hover, .attraction-right-arrow:hover, .calendar-button:hover,
+.submit-button:hover{
     opacity: 0.5;
+    cursor: pointer;
 }
 
 .right-arrow{
     width: 32px;
     height: 32px;
-    background-image: url("/static/right container_default.png");
+    background-image: url("/static/right arrow.png");
+    background-size: contain;
+    background-position: center;
+    border: none; 
+    outline: none; 
+    background-color: transparent;
+}
+
+.attraction-left-arrow, .attraction-right-arrow {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  
+  .attraction-left-arrow {
+    left: 25px;
+    background-image: url('/static/left arrow.png');
+    background-size: cover;
+  }
+  
+  .attraction-right-arrow {
+    left: 504px;
+    background-image: url('/static/right arrow.png');
+    background-size: cover;
+  }
+
+hr{
+    height: 1px; 
+    border: none; 
+    background-color: #d7d6d6;
+}
+
+.booking-container{
+    position: relative;
+    margin-top: 50px; 
+    width: 1200px; 
+    display: flex; 
+    height: 400px;
+    left: 50%; 
+    transform: translateX(-50%);
+    align-items: center;
+}
+
+.booking-image-container{
+    max-width: 540px;
+    height: 400px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.booking-image{
+    flex-shrink: 0;
+    width: 540px;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    border-radius: 5px;
+}
+
+.attraction-content-container {
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    left: 585px;
+}
+
+.attraction-name-container{
+    height: 33px;
+    font-weight: 700;
+    font-size: 24px;
+    color: #666666;
+    line-height: 24px;
+    font-family:"Noto Sans TC", sans-serif;
+}
+
+.cat-container{
+    height: 22px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #666666;
+    line-height: 13.3px;
+    position: absolute;
+    top: 48px;
+    width: 600px;
+    font-family:"Noto Sans TC", sans-serif;
+}
+
+.booking-area{
+    position:absolute;
+    top: 90px;
+    width: 600px;
+    height: 302px;
+    background-color: #E8E8E8;
+}
+
+.form-header, .form-parah, .form-group1, .form-group2, .form-group3{
+    text-align: left;
+    color: #666666;
+    font-size: 16px;
+    width: 560px;
+    font-family:"Noto Sans TC", sans-serif;
+    align-items: center;
+    display: flex;
+}
+.form-header{
+    height: 22px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-weight: 700;
+    line-height: 13.3px;
+}
+
+.form-parah{
+    height: 24px;
+    top: 52px;
+    left: 20px;
+    position: absolute;
+    font-weight: 400; 
+    font-size: 16px;
+    line-height: 13.3px;
+}
+
+.form-group1{
+    height: 35px;
+    top: 91px;
+    left: 20px;
+    position: absolute;
+    display: flex;
+}
+/*
+.form-group2{
+    height: 22px;
+    top: 141px;
+    left: 20px;
+    position: absolute;
+}
+
+input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    display: none;
+}
+
+.form-group2 label{
+    width: 87px;
+    display: flex;
+
+    justify-content: center;
+    content: '';
+}
+
+.form-group2 label:before{
+    content: '';
+    width: 22px;
+    height: 22px;
+    border: none;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 5px;
+    z-index: 1;
+    position: absolute;
+    left: 0px;
+    
+    margin-top: auto;
+    margin-bottom: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="radio"]:checked + label:before {
+    background-color: #448899;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 5px;
+    z-index: 2;
+    position: absolute;
+    left: 0px;
+}*/
+
+.form-group2 {
+    position: absolute;
+    top: 141px;
+    left: 20px;
+  }
+  
+  .form-group2 label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  input[type="radio"] {
+    width: 22px;
+    height: 22px;
+    display: none;
+  }
+  
+  .form-group2 label:before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    border: none;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    position: relative;
+    z-index: auto;
+  }
+  
+  input[type="radio"]:checked + label:before {
+    background-color: #FFFFFF;
+  }
+  
+  input[type="radio"]:checked + label:after {
+    content: '';
+    width: 18px;
+    height: 18px;
+    background-color: #448899;
+    border-radius: 50%;
+    position: absolute;
+    left: 8px;
+    top: 2px;
+  }
+  
+
+#date{
+    height: 25px;
+    width: 149px;
+    border: none;
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 13.3px;
+    text-align: left;
+    outline: none;;
+    justify-content: center;
+    display: flex
+}
+
+#date::placeholder{
+    color: #000000;
+}
+
+.form-group3{
+    height: 22px;
+    top: 178px;
+    left: 20px;
+    position: absolute;
+    display: flex;
+}
+
+.submit-button{
+    width: 154px;
+    height: 36px;
+    top: 225px;
+    left: 20px;
+    align-content: center;
+    border-radius: 5px;
+    position: absolute;
+    background-color: #448899;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: center;
+}
+
+.infors{
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 80px;
+    width: 1200px;
+    left: 50%; 
+    transform: translateX(-50%);
+}
+
+.description, .address-header, .address, .transport{
+    color: #666666;
+    margin: 10px;
+    font-size: 16px;
+    text-align: left;
+    font-family:"Noto Sans TC", sans-serif;
+}
+.description{
+    position: relative;
+    font-weight: 400;
+    line-height: 23.17px;
+}
+
+.address-header{
+    margin-top: 30px;
+    font-weight: 700;
+    line-height: 13.3px;
+}
+
+.address, .transport{
+    font-weight: 400;
+    line-height: 23.17px;
+}
+
+.right-arrow{
+    width: 32px;
+    height: 32px;
+    background-image: url("/static/right arrow.png");
     background-size: contain;
     background-position: center;
     border: none; 
@@ -363,9 +687,31 @@
     top: 5px;
 }
 
-body{margin:0px}
-.dropdown-content{
-    display:none;
+.calender-area{
+    display: flex;
+    height: 35px;
+    width: 193px;
+    background-color: #FFFFFF;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-button{
+    background-image: url("/static/icon_calendar.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+body{
+    margin:0px;
+    /*font-family:"Noto Sans TC", sans-serif;*/
 }
 
 /*以上稱為電腦版設計，以下media部分為平板和手機板設計*/
