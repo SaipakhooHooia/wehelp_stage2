@@ -438,7 +438,6 @@ input[type="radio"]:checked + label:after {
     opacity: 0.75;
 }
 
-
 .popup-dialog {
     display: none;
     width: 340px;
@@ -490,11 +489,12 @@ input[type="radio"]:checked + label:after {
     line-height: 24px;
     text-align: center;
     color: #666666;
+    height: 27px;
 
 }
 
 .login-email, .login-password, .signup-name, .signup-email, .signup-password, .login-area button, .signup-area button, .signup-bottom-message{
-    margin-top: 20px;
+    margin-top: 10px;
     height: 47px;
     max-width: 310px;
     width: 100%;
@@ -516,7 +516,7 @@ input[type="radio"]:checked + label:after {
     height: 22px;
     align-items: center;
     justify-content: center; 
-    margin-top: 15px;
+    margin-top: 10px;
     color: rgba(255, 55, 0, 0.956);
 }
 
@@ -525,7 +525,7 @@ input[type="radio"]:checked + label:after {
     display: flex; 
     align-items: center;
     justify-content: center; 
-    margin-top: 15px;
+    margin-top: 10px;
     color: #666666;
     font-size: 16px;
     font-weight: 500;
