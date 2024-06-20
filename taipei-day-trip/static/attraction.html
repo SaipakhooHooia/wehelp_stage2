@@ -5,14 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attraction</title>
   <link rel="stylesheet" type="text/css" href="/static/attraction.css" async/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class = "navibar">
-    <span class = "taipei-trip">台北一日遊</span>
-    <span class = "menu-bar">
-        <a class="menu">預定行程</a>
-        <a class="menu">登入/註冊</a>
-    </span>
+    <div class = "navibar">
+      <span class = "taipei-trip">台北一日遊</span>
+      <span class = "menu-bar">
+          <a class="menu">預定行程</a>
+          <a class="menu login-signup">登入/註冊</a>
+          <a class = "menu logout">登出系統</a>
+      </span>
+  </div>
+  <div class = "popup-dialog">
+      <div class = "popup-dialog-header"></div>
+      <div class = "close-icon"><img src = "/static/icon_close.png"></div>
+      <div class = "login-signup-container">
+          <div class = "login-area">
+              <div class = "popup-dialog-header-content">登入會員帳號</div>
+              <form method = "put" onsubmit = "return login(event)"> 
+                  <input type = "text" name = "login-email" class = "login-email" placeholder = "輸入電子信箱">
+                  <input type = "password" name = "login-password" class = "login-password" placeholder = "輸入密碼">
+                  <br>
+                  <button type = "submit">登入帳戶</button>
+                  <dic class = "login-result"></dic>
+                  <div class = "switch-to-signup">還沒有帳戶?點此註冊</div>
+              </form>
+          </div>
+          <div class = "signup-area" style = "display: none">
+              <div class = "popup-dialog-header-content">註冊會員帳號</div>
+              <form method = "post" onsubmit = "return signup(event)"> 
+                  <input type = "text" name = "signup-name" class = "signup-name" placeholder = "輸入姓名">
+                  <input type = "text" name = "signup-email" class = "signup-email" placeholder = "輸入電子信箱">
+                  <input type = "password" name = "signup-password" class = "signup-password" placeholder = "輸入密碼">
+                  <br>
+                  <button type = "submit">註冊新帳戶</button>
+                  <dic class = "signup-result"></dic>
+                  <div class = "switch-to-login">已經有帳戶了?點此登入</div>
+              </form>
+          </div>
+      </div>
   </div>
   <hr class = "top-hr">
 
