@@ -150,14 +150,16 @@ hr {
 }
 
 .booking-container {
-    position: relative;
+    /*position: relative;*/
     margin-top: 50px; 
+    margin-left: auto;
+    margin-right: auto;
     max-width: 1200px; 
     width:100%;
     display: flex; 
     height: 400px;
-    left: 50%; 
-    transform: translateX(-50%);
+    /*left: 50%; 
+    transform: translateX(-50%);*/
     box-sizing: border-box;
     align-items: center;
     justify-content: space-between;
@@ -183,7 +185,9 @@ hr {
 
 .attraction-content-container {
     width: 600px;
-    height: 400px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .attraction-name-container {
@@ -201,15 +205,13 @@ hr {
     font-size: 16px;
     color: #666666;
     line-height: 13.3px;
-    position: absolute;
-    top: 48px;
+    margin-bottom: 20px;
+    margin-top: 15px;
     width: 600px;
     font-family: "Noto Sans TC", sans-serif;
 }
 
 .booking-area {
-    position: absolute;
-    top: 90px;
     width: 600px;
     height: 302px;
     background-color: #E8E8E8;
@@ -223,22 +225,18 @@ hr {
     font-family: "Noto Sans TC", sans-serif;
     align-items: center;
     display: flex;
+    margin-top: 15px;
+    margin-left: 20px;
 }
 
 .form-header {
     height: 22px;
-    position: absolute;
-    top: 15px;
-    left: 20px;
     font-weight: 700;
     line-height: 13.3px;
 }
 
 .form-parah {
     height: 24px;
-    top: 52px;
-    left: 20px;
-    position: absolute;
     font-weight: 400; 
     font-size: 16px;
     line-height: 13.3px;
@@ -246,16 +244,6 @@ hr {
 
 .form-group1 {
     height: 35px;
-    top: 91px;
-    left: 20px;
-    position: absolute;
-    display: flex;
-}
-
-.form-group2 {
-    position: absolute;
-    top: 141px;
-    left: 20px;
 }
 
 .form-group2 label {
@@ -279,7 +267,9 @@ input[type="radio"] {
     border: none;
     background-color: #FFFFFF;
     border-radius: 50%;
-    position: relative;
+    position: initial;
+    justify-content: center;
+    align-content: center;
     z-index: auto;
 }
 
@@ -318,27 +308,23 @@ input[type="radio"]:checked + label:after {
 
 .form-group3 {
     height: 22px;
-    top: 178px;
-    left: 20px;
-    position: absolute;
-    display: flex;
 }
 
 .submit-button {
     width: auto;
     height: 36px;
-    top: 225px;
-    left: 20px;
     align-content: center;
     border-radius: 5px;
-    border: none;
-    position: absolute;
     background-color: #448899;
     color: #FFFFFF;
     font-size: 19px;
     font-weight: 400;
     line-height: 16px;
     text-align: center;
+    margin-top: 25px;
+    margin-left: 20px;
+    border: none;
+    padding: 10px 20px 10px 20px;
 }
 
 .infors {
@@ -404,6 +390,7 @@ input[type="radio"]:checked + label:after {
     position: relative;
     display: flex; 
     justify-content: center;
+    float: left;
 }
 
 .carousel-indicators {
@@ -451,13 +438,146 @@ input[type="radio"]:checked + label:after {
     opacity: 0.75;
 }
 
+.popup-dialog {
+    display: none;
+    width: 340px;
+    height: auto;
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 6px;
+    transition: max-height 0.3s ease-in-out; 
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 60px 0px #AAAAAA;
+    z-index: 9999;
+}
+
+.popup-dialog.active { 
+    height: auto;
+}
+
+.popup-dialog-header{
+    width: 340px;
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-top-left-radius: 6px; 
+    border-top-right-radius: 6px;
+}
+
+.login-signup-container{
+    width: 310px;
+    height: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-area, .signup-area{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.popup-dialog-header-content{
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+    color: #666666;
+    height: 27px;
+
+}
+
+.login-email, .login-password, .signup-name, .signup-email, .signup-password, .login-area button, .signup-area button, .signup-bottom-message{
+    margin-top: 10px;
+    height: 47px;
+    max-width: 310px;
+    width: 100%;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.login-email, .login-password, .signup-name, .signup-email, .signup-password, .signup-bottom-message{
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 13.3px;
+    text-align: left;
+    color: #757575;
+}
+
+.login-result, .signup-result{
+    display: none;
+    height: 22px;
+    align-items: center;
+    justify-content: center; 
+    margin-top: 10px;
+    color: rgba(255, 55, 0, 0.956);
+}
+
+.switch-to-login, .switch-to-signup {
+    height: 22px;
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    margin-top: 10px;
+    color: #666666;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 13.3px;
+    text-align: center;
+}
+
+.login-area button, .signup-area button{
+    width: 100%;
+    height: 47px;
+    padding: 10px 20px 10px 20px;
+    border-radius: 5px;
+    background-color: #448899;
+    border: none;
+    color: #FFFFFF;
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: center;
+}
+
+.close-icon{
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 10px;
+}
+
+.close-icon:hover, .switch-to-login:hover, .switch-to-signup:hover, .login-area button:hover, .signup-area button:hover, .logout:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.logout{
+    display: none;
+}
+
+body {
+    margin:0px;
+    font-family:"Noto Sans TC", sans-serif;
+}
+
 @media(max-width:1200px){
     .booking-container, .infors{
-        width: 900px;
+        max-width: 1200px;
+        width: auto;
         height:auto;
         margin-top: 0px;
-        margin-left: auto;
-        margin-right: auto;
+        margin-left: 10px;
+        margin-right: 10px;
         left: 0;
         transform: none;
         justify-content: space-between;
@@ -468,15 +588,11 @@ input[type="radio"]:checked + label:after {
     }
 
     .image-wrapper{
-        width: 445px;
+        width: 530px;
     }
 
     .attraction-content-container, .booking-area{
-        width: 420px;
-    }
-
-    .attraction-content-container{
-        position: initial;
+        width: 450px;
     }
 
     .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
@@ -490,21 +606,24 @@ input[type="radio"]:checked + label:after {
     }
 
     .bottom-hr{
-        width: 100%;
+        margin-left: 10px;
+        margin-right: 10px;
+        width: calc(100% - 20px)
     }
 
 }
 
 @media(max-width:1000px){
     .booking-container, .infors{
-        max-width: 900px;
-        width: 100%;
+        max-width: 1000px;
+        width: auto;
         height:auto;
         margin-top: 0px;
+        margin-left: 10px;
+        margin-right: 10px;
         left: 0;
         transform: none;
-        margin-left: auto;
-        margin-right: auto;
+        justify-content: space-between;
     }
 
     .infors{
@@ -512,254 +631,148 @@ input[type="radio"]:checked + label:after {
     }
 
     .image-wrapper{
-        width: 445px;
+        max-width: 480px;
+        width: 100%;
     }
 
     .attraction-content-container, .booking-area{
-        width: 420px;
+        max-width: 400px;
+        width: 100%;
     }
 
-    .attraction-content-container{
-        left: 500px;
-    }
-
-    .cat-container,.form-header, .form-parah, .form-group1, .form-group2, .form-group3{
+    .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
         width: auto;
     }
 
-    .bottom-hr{
-        max-width: 900px;
+    .cat-container{
         width: 100%;
+        margin-top: 15px;
+    }
+
+    .bottom-hr{
+        margin-left: 10px;
+        margin-right: 10px;
+        width: calc(100% - 20px)
     }
 }
 
 
 @media(max-width:900px){
-    .booking-container{
-        display: flex;
-        flex-wrap: wrap;
-        width: 100%;
+    .booking-container, .infors{
+        max-width: 1000px;
+        width: auto;
         height:auto;
         margin-top: 0px;
-        /*
-        margin-left: auto;
-        margin-right: auto;*/
-    }
-
-    .booking-image, .attraction-name-container, .cat-container{
-        width: 100%;
-    }
-
-    .attraction-name-container, .cat-container{
-        justify-content:space-evenly; 
-        display: flex;
-    }
-    
-    .attraction-name-container, .cat-container{
-        position: absolute;
-    }
-
-    .attraction-name-container{
-        top: 10px;
-    }
-
-    .cat-container{
-        top: 48px;
-    }
-
-    .booking-image-container, .booking-image{
-        height: auto;
-        margin-left: 0px;
-        background-size: cover;
-        width: 89.44444vw;
-        max-width: 89.44444vw;
-    }
-
-    .attraction-content-container{
-        width: 100%;
-        height: 390px;
-        position: relative;
-        left: 0px;
         margin-left: 10px;
         margin-right: 10px;
-    }
-
-    .image-wrapper{
-        margin: 0px;
-        height: 400px;
-        width: 89.44444vw;
-        margin-bottom: 20px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .top-hr{
-        display: none;
-    }
-
-    .bottom-hr{
-        width: 89.44444vw;
-    }
-
-    .attraction-left-arrow, .attraction-right-arrow{
-        align-content: center;
-    }
-
-    .booking-area{
-        width: 89.44444vw;
-        height: 300px;
-        margin-left: auto;
-        margin-right: auto;
-        position: relative;
-    }
-
-    .infors{
-        width: 89.44444vw;
-        height: auto;
-    }
-
-    .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
-        max-width: 100%;
-    }
-
-    .form-parah{
-        line-height: 23.17px;
-    }
-}
-
-@media(max-width:500px){
-    .booking-container{
-        display: flex;
+        transform: none;
+        justify-content: space-between;
         flex-wrap: wrap;
-        max-width: 100%; 
-        width:100%;
-        height:auto;
-        margin-top: 0px;
-        margin-left: auto;
-        margin-right: auto;
+        gap: 20px;
     }
 
     .booking-image-container{
-        width: 100%;
+        max-width: 600px;
+        width: auto;
     }
 
-    .booking-image, .attraction-name-container, .cat-container{
-        width: 100%;
-    }
-
-    .attraction-name-container, .cat-container{
-       justify-content: flex-start;
-       display: flex;
-    }
-    
-    .attraction-name-container, .cat-container{
-        position: initial;
-        height: auto;
-    }
-
-    .attraction-name-container{
-        top: 10px;
-    }
-
-    .cat-container{
-        margin-top: 15px;
-    }
-
-    .transport{
-        word-break: break-all;
-    }
-
-    .booking-image-container, .booking-image{
-        height: 350px;
-        margin-left: 0px;
-        background-size: cover;
-        max-width: 100%;
-    }
-
-    .attraction-content-container{
-        width: 100%;
-        height: 390px;
-        position: relative;
-        /*left: 0px;
-        margin-left: auto;
-        margin-right: auto;
-        flex-wrap: wrap;
-        display: flex;*/
-    }
-
-    .image-wrapper{
-        margin: 0px;
-        height: 350px;
-        width: 100%;
-        margin-bottom: 20px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .top-hr{
-        display: none;
-    }
-
-    .bottom-hr{
-        max-width: calc(100% - 20px); 
-        width: calc(100% - 20px); 
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    .attraction-left-arrow, .attraction-right-arrow{
-        top: 50%;
-    }
-
-    .booking-area{
-        width: 100%;
-        height: 300px;
-        margin-left: auto;
-        margin-right: auto;
-        position: absolute;
-        top: 90px;
+    .booking-image{
+        width: 600px;
     }
 
     .infors{
-        max-width: 100%; 
-        width:100%;
-        height: auto;
-        max-width: calc(100% - 20px); 
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .image-wrapper, .infors{
+        max-width: 600px;
+        width: 100%;
         margin-left: auto;
         margin-right: auto;
-        padding-left: 5px;
-        padding-right: 5px;
-        box-sizing: border-box;
+    }
+
+    .attraction-content-container, .booking-area{
+        max-width: 580px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .form-header, .form-parah, .form-group1, .form-group2, .form-group3{
         width: auto;
     }
 
-    .form-group1, .form-group2, .form-group3{
-        position: initial;
+    .cat-container{
+        width: 100%;
         margin-top: 15px;
-        margin-left: 20px;
+    }
+
+    .bottom-hr{
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .top-hr{
+        display: none;
+    }
+}
+
+@media(max-width:600px){
+    .booking-container{
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .attraction-content-container, .booking-area, .infors{
+        max-width: 580px;
+        margin-left: 0px;
+        margin-right: 0px;
+        width: 100%; 
+        padding-left: 10px;  
+        padding-right: 10px;
+    }
+
+    .infors{
+        margin-bottom: 40px;
+        padding: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        width: calc(100% - 20px);
+        box-sizing: border-box;
+    }
+
+    .bottom-hr{
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+        width: calc(100% - 40px);
+    }
+
+    .booking-area{
+        margin: 0px;
+        box-sizing: border-box;
+    }
+
+    .booking-image, .booking-image-container{
+        width: 100%;
+        height: 350px;
+    }
+
+    .image-wrapper{
+        height: 350px;
     }
 
     .form-parah{
-        position: initial;
-        margin-top: 15px;
-        margin-left: 20px;
-        margin-right: 20px;
-        line-height: 23.17px;
         height: auto;
+        line-height: 23.17px;
+        margin-right: 20px;
     }
 
-    .form-header{
-        position: initial;
-        margin-top: 15px;
-        margin-left: 20px;
-    }
-
-    .submit-button{
-        position: initial;
-        margin-top: 25px;
-        margin-left: 20px;
+    .transport{
+        word-break: break-all;
     }
 }

@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Request, Path, Query, HTTPException, Depends
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import FastAPI, Request, Path, Query, HTTPException, Depends, Body, Header
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 import mysql.connector
 from pydantic import BaseModel, HttpUrl
-from typing import Optional, List
+from typing import Optional, List, TypeVar, Generic
 import json
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from mysql.connector.pooling import MySQLConnectionPool
+import jwt
 
 app=FastAPI()
 
@@ -27,7 +28,7 @@ def get_db_conn():
     connection = pool.get_connection()
     mycursor = connection.cursor(buffered=True)
     try:
-        yield mycursor
+        yield mycursor, connection
     finally:
         mycursor.close()
         connection.close()
@@ -76,8 +77,10 @@ class Response_list(BaseModel):
 	nextPage: Optional[int] = None
 	data: List[Page_content]
 
-class Response_model(BaseModel):
-	data: Page_content
+T = TypeVar('T')
+
+class Response_model(BaseModel, Generic[T]):
+    data: T
 
 class Station_spot(BaseModel):
 	data: List[str]
@@ -88,12 +91,12 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
     if exc.status_code == 400:
         return JSONResponse(
             status_code=400,
-            content={"error": True, "message": "景點編號不正確"}
+            content={"error": True, "message": "400 Bad Request"}
         )
     elif exc.status_code == 500:
         return JSONResponse(
             status_code=500,
-            content={"error": True, "message": "伺服器內部錯誤，請稍後再試。"}
+            content={"error": True, "message": "500 internal server error"}
         )
 
 @app.exception_handler(RequestValidationError)
@@ -105,8 +108,14 @@ async def custom_validation_exception_handler(request: Request, exc: RequestVali
     )
 
 records_per_page = 12
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("./static/favicon.ico")
+
 @app.get("/api/attractions", response_model=Response_list)
-async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Query(None), mycursor=Depends(get_db_conn)):
+async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Query(None), db_conn = Depends(get_db_conn)):
+    mycursor, connection = db_conn
     if keyword:
         mycursor.execute("SELECT COUNT(*) FROM website.turist_spot WHERE name LIKE %s OR mrt LIKE %s", ('%' + keyword + '%','%' + keyword + '%'))
         total_records = mycursor.fetchone()[0]
@@ -163,19 +172,20 @@ async def api_attract(page: int = Query(0, ge = 0), keyword: Optional[str] = Que
     return Response_list(nextPage = nextPage, data = results)
 
 @app.get("/api/attraction/{attractionId}", response_model=Response_model)
-async def api_attractid(attractionId: int = Path(...), mycursor=Depends(get_db_conn)):
-	sql = """
-		SELECT id, name, category, description, address, transport, mrt, lat, lng, image 
-		FROM turist_spot 
-		WHERE id = %s
-		"""
-	values = (attractionId,)
-	mycursor.execute(sql, values)
-	row = mycursor.fetchone()
+async def api_attractid(attractionId: int = Path(...), db_conn = Depends(get_db_conn)):
+    mycursor, connection = db_conn
+    sql = """
+        SELECT id, name, category, description, address, transport, mrt, lat, lng, image 
+        FROM turist_spot 
+        WHERE id = %s
+        """
+    values = (attractionId,)
+    mycursor.execute(sql, values)
+    row = mycursor.fetchone()
 
-	if row:
-		results = Page_content(
-			id=row[0],
+    if row:
+        results = Page_content(
+            id=row[0],
             name=row[1],
             category=row[2],
             description=row[3],
@@ -185,15 +195,16 @@ async def api_attractid(attractionId: int = Path(...), mycursor=Depends(get_db_c
             lat=row[7],
             lng=row[8],
             images=json.loads(row[9])
-		)
-		return Response_model(data = results)
-	elif not row:
-		raise HTTPException(status_code = 400)
-	else:
-		raise HTTPException(status_code = 500)
+        )
+        return Response_model(data=results)
+    elif not row:
+        raise HTTPException(status_code=400)
+    else:
+        raise HTTPException(status_code=500)
 
-@app.get("/api/mrts", response_model=Station_spot)
-async def api_mrts(mycursor=Depends(get_db_conn)):
+@app.get("/api/mrts", response_model = Station_spot)
+async def api_mrts(db_conn = Depends(get_db_conn)):
+    mycursor, connection = db_conn
     sql = """
         SELECT mrt_station
         FROM website.turist_spot_mrt
@@ -208,3 +219,125 @@ async def api_mrts(mycursor=Depends(get_db_conn)):
         return Station_spot(data=station_names)
     else:
         raise HTTPException(status_code=500)
+#---------------------------------------------------------------------------
+#處理登入介面和驗證
+class Correct_message(BaseModel):
+      ok: bool
+
+class Error_message(BaseModel):
+	error: bool
+	message: str
+
+class Signup_message(BaseModel):
+      name: str
+      email: str
+      password: str
+    
+@app.post("/api/user")
+async def signup(signup_data: Signup_message = Body(...), db_conn = Depends(get_db_conn)):
+    mycursor, connection = db_conn
+    mycursor.execute("SELECT COUNT(*) FROM website.member WHERE email = %s", (signup_data.email,))
+    result_count = mycursor.fetchone()[0]
+    print("result_count = ", result_count)
+    if result_count > 0:
+        error_message = "Email already been used"
+        result = Error_message(
+              error = True,
+              message =   error_message
+              )
+        return result
+    else:
+        sql = "INSERT INTO `website`.`member` (name, email, password) VALUES (%s, %s, %s)"
+        val = (signup_data.name, signup_data.email, signup_data.password)
+        mycursor.execute(sql, val)
+        connection.commit()
+        result = Correct_message(
+              ok = True
+        )
+        return result
+
+class User_data(BaseModel):
+      id: int
+      name: str
+      email: str
+
+def user_data(email, db_conn):
+    mycursor, connection = db_conn
+    mycursor.execute("SELECT * FROM website.member WHERE email = %s", (email,))
+    row = mycursor.fetchone()
+    if row:
+        result = User_data(
+            id=row[0],
+            name=row[1],
+            email=row[2]
+        )
+        return result
+    return None
+'''
+@app.get("/api/user/auth")
+async def auth(token: str, db_conn = Depends(get_db_conn)):
+    decoded_jwt = jwt.decode(token, "midori", algorithm="HS256")
+    print("decoded_jwt = "+decoded_jwt)
+   result = user_data(email, db_conn)
+    
+    if result:
+        return Response_model(data = result)
+    else:
+        error_message = "User not found"
+        result = Error_message(
+              error = True,
+              message =   error_message
+              )
+        return result'''
+
+def get_token_authorization(authorization):
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=400, detail="Invalid authorization header")
+    token = authorization.split("Bearer ")[1]
+    return token
+
+@app.get("/api/user/auth")
+async def auth(authorization: str = Header(...)):
+    token = get_token_authorization(authorization)
+    try:
+        result = jwt.decode(token, "midori", algorithms=["HS256"])
+        return result
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+class Login_message(BaseModel):
+      email: str
+      password: str
+
+class Token(BaseModel):
+     token: str
+
+def password_verify(login_email, login_pwd, db_conn):
+    mycursor, connection = db_conn
+    mycursor.execute("SELECT password FROM website.member WHERE email = %s", (login_email,))
+    password = mycursor.fetchone()
+    if password[0] == login_pwd:
+         return True
+    else:
+        return False
+
+@app.put("/api/user/auth")
+async def jwtauth(login_data: Login_message = Body(...), db_conn = Depends(get_db_conn)):
+    user_data_result = user_data(login_data.email, db_conn)
+    if user_data_result is None:
+        error_message = "User not found"
+        return Error_message(
+            error=True,
+            message=error_message
+        )
+    if password_verify(login_data.email, login_data.password, db_conn) == True:
+        encoded_jwt = jwt.encode(user_data_result.model_dump(), "midori", algorithm="HS256")
+        return Token(token = encoded_jwt)
+    else:
+        error_message = "Wrong email or password"
+        return Error_message(
+            error=True,
+            message=error_message
+        )
