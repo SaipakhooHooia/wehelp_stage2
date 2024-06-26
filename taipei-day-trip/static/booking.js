@@ -265,10 +265,9 @@ document.addEventListener("DOMContentLoaded", function() {
         booking();
     }
     else{
-        loginSignup();
+        window.location.href = "/";
     }
 });
-
 
 function setFooterHeight() {
     let footer = document.querySelector(".footer");

@@ -339,29 +339,22 @@ class BookingInfo(BaseModel):
      time: str
      price: int
 
+
+
 @app.get("/api/booking")
 async def booking(request: Request, db_conn = Depends(get_db_conn), authorization: str = Header(...)):
     token = get_token_authorization(authorization)
     if token:
         user_id = token["id"]
         mycursor, connection = db_conn
-        mycursor.execute("SELECT attractionId, date, time, price FROM website.booking WHERE user_id = %s ORDER BY date DESC LIMIT 1", (user_id,))
+        mycursor.execute("SELECT attractionId, date, time, price FROM website.booking WHERE user_id = %s", (user_id,))
         row = mycursor.fetchone()
-        
-        if not row:
-            return JSONResponse(content={"error": "No bookings found for user"}, status_code=404)
-        
         attractionId = row[0]
         date = row[1].strftime('%Y-%m-%d')
         time = row[2]
         price = row[3]
-
         mycursor.execute("SELECT id, name, address, image FROM website.turist_spot WHERE id = %s", (attractionId,))
         rowing = mycursor.fetchone()
-        
-        if not rowing:
-            return JSONResponse(content={"error": "Attraction not found"}, status_code=404)
-        
         id = rowing[0]
         name = rowing[1]
         address = rowing[2]
@@ -370,22 +363,21 @@ async def booking(request: Request, db_conn = Depends(get_db_conn), authorizatio
         first_image = images_list[0]
 
         info = AttractionInfo(
-            id = id,
-            name = name,
-            address = address,
-            image = first_image
+                id = id,
+                name = name,
+                address = address,
+                image = first_image
         )
-        booking_info = BookingInfo(
+        result = BookingInfo(
             attraction = info,
             date = date,
             time = time,
             price = price
         )
-
-        print("booking-get: ", booking_info)
-        return Response_model(data=booking_info)
+        print("booking-get: ",Response_model(data=result))
+        return Response_model(data=result)
     else:
-        return JSONResponse(content={"error": "Invalid token"}, status_code=401)
+        return None
 
 class BookingRequest(BaseModel):
     attractionId: int
@@ -400,11 +392,13 @@ async def create_booking(booking: BookingRequest, db_conn=Depends(get_db_conn), 
         user_id = token["id"]
         mycursor, connection = db_conn
 
+        # Fetch all existing bookings for the user
         select_sql = "SELECT id FROM `website`.`booking` WHERE user_id = %s"
         mycursor.execute(select_sql, (user_id,))
         existing_bookings = mycursor.fetchall()
 
         if existing_bookings:
+            # Update all existing bookings
             update_sql = """
             UPDATE `website`.`booking`
             SET attractionId = %s, date = %s, time = %s, price = %s
@@ -414,6 +408,7 @@ async def create_booking(booking: BookingRequest, db_conn=Depends(get_db_conn), 
                 val = (booking.attractionId, booking.date, booking.time, booking.price, user_id, booking_id[0])
                 mycursor.execute(update_sql, val)
         else:
+            # Insert new booking if no existing bookings
             sql = "INSERT INTO `website`.`booking` (attractionId, date, time, price, user_id) VALUES (%s, %s, %s, %s, %s)"
             val = (booking.attractionId, booking.date, booking.time, booking.price, user_id)
             mycursor.execute(sql, val)

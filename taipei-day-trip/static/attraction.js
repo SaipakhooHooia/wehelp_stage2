@@ -347,7 +347,6 @@ function getDate(){
 let submitButton = document.querySelector(".submit-button");
 function bookingButton() {
     if (loginState){
-        window.location.href = "/booking";
         let today = getDate();
         fetch("/api/booking", {
             method: "POST",
@@ -371,6 +370,8 @@ function bookingButton() {
             else if(loginState ===false){
                 loginSignup();
             }
+
+            window.location.href = "/booking";
         })
         .catch(error => {
             console.error('Error:', error);
