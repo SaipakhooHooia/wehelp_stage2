@@ -335,6 +335,15 @@ function toLogout(){
 }
 
 //----------------------booking system------------------------------
+document.getElementById('date').addEventListener('input', function() {
+    let selectedDate = new Date(this.value);
+    let today = new Date();
+    if (selectedDate < today) {
+        alert('請選擇今天或之後的日期。');
+        this.value = ''; 
+    }
+});
+
 function getDate(){
     let today = new Date();
     let year = today.getFullYear();
