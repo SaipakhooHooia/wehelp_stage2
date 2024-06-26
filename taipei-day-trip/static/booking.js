@@ -254,8 +254,6 @@ function booking(){
         remind.textContent = "目前沒有任何待預訂的行程";
         body.style.maxHeight = "100vh";
         setFooterHeight();
-        console.error("JSON parse error:", error);
-        
     })
 }
 

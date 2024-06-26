@@ -83,7 +83,7 @@ class Response_model(BaseModel, Generic[T]):
 
 class Station_spot(BaseModel):
 	data: List[str]
-
+'''
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
     print(f"Handling HTTPException with status code: {exc.status_code}")
@@ -96,14 +96,14 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
         return JSONResponse(
             status_code=500,
             content={"error": True, "message": "500 internal server error"}
-        )
+        )'''
 
 @app.exception_handler(RequestValidationError)
 async def custom_validation_exception_handler(request: Request, exc: RequestValidationError):
     print("Handling RequestValidationError")
     return JSONResponse(
         status_code=422,
-        content={"error": True, "message": "請求參數錯誤"}
+        content={"error": True, "message": "Input data incorrect."}
     )
 
 records_per_page = 12
@@ -275,15 +275,17 @@ def user_data(email, db_conn):
 
 def get_token_authorization(authorization: str):
     if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=400, detail="Invalid authorization header")
+        raise HTTPException(status_code=400, detail=Error_message(error=True, message="Illegal user.").model_dump())
     token = authorization.split("Bearer ")[1]
     try:
         payload = jwt.decode(token, "midori", algorithms=["HS256"])
         return payload
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail=Error_message(error=True, message="Token has expired.").model_dump())
+    except jwt.DecodeError:
+        raise HTTPException(status_code=403, detail=Error_message(error=True, message="Token decode failed.").model_dump())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=Error_message(error=True, message="500 internal server error.").model_dump())
 
 @app.get("/api/user/auth")
 async def auth(authorization: str = Header(...)):
@@ -325,8 +327,6 @@ async def jwtauth(login_data: Login_message = Body(...), db_conn = Depends(get_d
             message=error_message
         )
 
-
-
 class AttractionInfo(BaseModel):
     id: int
     name: str
@@ -339,45 +339,51 @@ class BookingInfo(BaseModel):
      time: str
      price: int
 
-
-
 @app.get("/api/booking")
 async def booking(request: Request, db_conn = Depends(get_db_conn), authorization: str = Header(...)):
     token = get_token_authorization(authorization)
-    if token:
-        user_id = token["id"]
-        mycursor, connection = db_conn
-        mycursor.execute("SELECT attractionId, date, time, price FROM website.booking WHERE user_id = %s", (user_id,))
-        row = mycursor.fetchone()
-        attractionId = row[0]
-        date = row[1].strftime('%Y-%m-%d')
-        time = row[2]
-        price = row[3]
-        mycursor.execute("SELECT id, name, address, image FROM website.turist_spot WHERE id = %s", (attractionId,))
-        rowing = mycursor.fetchone()
-        id = rowing[0]
-        name = rowing[1]
-        address = rowing[2]
-        image = rowing[3]
-        images_list = json.loads(image)
-        first_image = images_list[0]
+    try:
+        if token:
+            user_id = token["id"]
+            mycursor, connection = db_conn
+            mycursor.execute("SELECT attractionId, date, time, price FROM website.booking WHERE user_id = %s", (user_id,))
+            row = mycursor.fetchone()
+            if row:
+                attractionId = row[0]
+                date = row[1].strftime('%Y-%m-%d')
+                time = row[2]
+                price = row[3]
+                mycursor.execute("SELECT id, name, address, image FROM website.turist_spot WHERE id = %s", (attractionId,))
+                rowing = mycursor.fetchone()
+                id = rowing[0]
+                name = rowing[1]
+                address = rowing[2]
+                image = rowing[3]
+                images_list = json.loads(image)
+                first_image = images_list[0]
 
-        info = AttractionInfo(
-                id = id,
-                name = name,
-                address = address,
-                image = first_image
-        )
-        result = BookingInfo(
-            attraction = info,
-            date = date,
-            time = time,
-            price = price
-        )
-        print("booking-get: ",Response_model(data=result))
-        return Response_model(data=result)
-    else:
-        return None
+                info = AttractionInfo(
+                        id = id,
+                        name = name,
+                        address = address,
+                        image = first_image
+                )
+                result = BookingInfo(
+                    attraction = info,
+                    date = date,
+                    time = time,
+                    price = price
+                )
+                print("booking-get: ",Response_model(data=result))
+                return Response_model(data=result)
+            else:
+                result = Error_message(
+                error = True,
+                message = "No booking data available."
+            )
+            return result
+    except HTTPException as e:
+        return e
 
 class BookingRequest(BaseModel):
     attractionId: int
@@ -388,17 +394,15 @@ class BookingRequest(BaseModel):
 @app.post("/api/booking")
 async def create_booking(booking: BookingRequest, db_conn=Depends(get_db_conn), authorization: str = Header(...)):
     token = get_token_authorization(authorization)
-    if token:
-        user_id = token["id"]
-        mycursor, connection = db_conn
+    
+    user_id = token["id"]
+    mycursor, connection = db_conn
+    select_sql = "SELECT id FROM `website`.`booking` WHERE user_id = %s"
+    mycursor.execute(select_sql, (user_id,))
+    existing_bookings = mycursor.fetchall()
 
-        # Fetch all existing bookings for the user
-        select_sql = "SELECT id FROM `website`.`booking` WHERE user_id = %s"
-        mycursor.execute(select_sql, (user_id,))
-        existing_bookings = mycursor.fetchall()
-
+    try:
         if existing_bookings:
-            # Update all existing bookings
             update_sql = """
             UPDATE `website`.`booking`
             SET attractionId = %s, date = %s, time = %s, price = %s
@@ -407,25 +411,28 @@ async def create_booking(booking: BookingRequest, db_conn=Depends(get_db_conn), 
             for booking_id in existing_bookings:
                 val = (booking.attractionId, booking.date, booking.time, booking.price, user_id, booking_id[0])
                 mycursor.execute(update_sql, val)
+
+            result = Correct_message(ok=True)
+            return result
         else:
-            # Insert new booking if no existing bookings
             sql = "INSERT INTO `website`.`booking` (attractionId, date, time, price, user_id) VALUES (%s, %s, %s, %s, %s)"
             val = (booking.attractionId, booking.date, booking.time, booking.price, user_id)
             mycursor.execute(sql, val)
-
-        connection.commit()
-        result = Correct_message(
-            ok=True
-        )
-        return result
-    return None
+            connection.commit()
+            result = Correct_message(ok=True)
+            return result
+    except HTTPException as e:
+        return e
 
 @app.delete("/api/booking")
 async def delete_booking(db_conn = Depends(get_db_conn), authorization: str = Header(...)):
     token = get_token_authorization(authorization)
-    if token:
-        mycursor, connection = db_conn
-        user_id = token["id"]
-        sql = "DELETE FROM website.booking WHERE user_id = %s"
-        mycursor.execute(sql, (user_id,))
-        connection.commit()
+    try:
+        if token:
+            mycursor, connection = db_conn
+            user_id = token["id"]
+            sql = "DELETE FROM website.booking WHERE user_id = %s"
+            mycursor.execute(sql, (user_id,))
+            connection.commit()
+    except HTTPException as e:
+        return e
