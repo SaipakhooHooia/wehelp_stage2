@@ -141,6 +141,7 @@ let accessToken = localStorage.getItem('accessToken');
 let greeting = document.querySelector(".greeting");
 let contactName = document.querySelector(".contact-name");
 let contactEmail = document.querySelector(".contact-email");
+/*
 async function user_data() {
   let accessToken = localStorage.getItem('accessToken');
   try {
@@ -171,7 +172,9 @@ async function user_data() {
     console.error('There was a problem with your fetch operation:', error);
     loginState = false;
   }
-}
+}*/
+
+import { user_data } from "./user_data_module.js";
 
 //---------------------------Popup Dialog------------------------------------------------------
 let loginSignupLink = document.querySelector(".login-signup");
