@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attraction</title>
-  <link rel="stylesheet" type="text/css" href="/static/attraction.css" async/>
+  <link rel="stylesheet" type="text/css" href="/static/attraction.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class = "navibar">
       <span class = "taipei-trip">台北一日遊</span>
       <span class = "menu-bar">
-          <a class="menu">預定行程</a>
-          <a class="menu login-signup">登入/註冊</a>
-          <a class = "menu logout">登出系統</a>
+          <a class="menu" onclick = "schedule()">預定行程</a>
+          <a class="menu login-signup" onclick = "loginSignup()">登入/註冊</a>
+          <a class = "menu logout" onclick = "toLogout()">登出系統</a>
       </span>
   </div>
   <div class = "popup-dialog">
       <div class = "popup-dialog-header"></div>
-      <div class = "close-icon"><img src = "/static/icon_close.png"></div>
+      <div class = "close-icon" onclick = "closeDialog()"><img src = "/static/icon_close.png"></div>
       <div class = "login-signup-container">
           <div class = "login-area">
               <div class = "popup-dialog-header-content">登入會員帳號</div>
@@ -28,7 +28,7 @@
                   <br>
                   <button type = "submit">登入帳戶</button>
                   <dic class = "login-result"></dic>
-                  <div class = "switch-to-signup">還沒有帳戶?點此註冊</div>
+                  <div class = "switch-to-signup" onclick = "toSignup()">還沒有帳戶?點此註冊</div>
               </form>
           </div>
           <div class = "signup-area" style = "display: none">
@@ -40,7 +40,7 @@
                   <br>
                   <button type = "submit">註冊新帳戶</button>
                   <dic class = "signup-result"></dic>
-                  <div class = "switch-to-login">已經有帳戶了?點此登入</div>
+                  <div class = "switch-to-login" onclick = "toLogin()">已經有帳戶了?點此登入</div>
               </form>
           </div>
       </div>
@@ -87,7 +87,7 @@
             <div class = "price" style = "font-weight: 400;">新台幣 2000 元</div>
           </div>
           
-          <button class="submit-button">開始預約行程</button>
+          <button class="submit-button" onclick = "bookingButton()">開始預約行程</button>
         </div>
     </div>
   </div>
@@ -104,6 +104,6 @@
         <div class = "footer-content">COPYRIGHT © 2021 台北一日遊</div>
     </div>
   </div>
-  <script src="/static/attraction.js" defer></script>
+  <script src = "/static/attraction.js" defer></script>
 </body>
 </html>

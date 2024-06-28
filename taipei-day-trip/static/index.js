@@ -1,8 +1,8 @@
-let mrtData;
-fetch("/api/mrts")
+function mrtInfo(){
+  fetch("/api/mrts")
   .then(response => response.json())
   .then(data => {
-    mrtData = data;
+    let mrtData = data;
     if (mrtData) {
       let slides = document.querySelector(".slides");
       for (let i = 0; i < mrtData.data.length; i++) {
@@ -34,27 +34,29 @@ fetch("/api/mrts")
     }
   })
   .catch(error => console.log(`Error: ${error}`));
+}
 
-const scrollDistance = window.innerWidth > 800 ? 600 : 100; // 如果螢幕寬度大於600px，滾動800px，否則滾動500px
+function scroll(){
+  const scrollDistance = window.innerWidth > 800 ? 600 : 100; // 如果螢幕寬度大於600px，滾動800px，否則滾動500px
 
-document.querySelector('.left-arrow').addEventListener('mousedown', () => {
-  document.querySelector('.slides').scrollBy({ left: -scrollDistance, behavior: 'smooth' });
-});
+  document.querySelector('.left-arrow').addEventListener('mousedown', () => {
+    document.querySelector('.slides').scrollBy({ left: -scrollDistance, behavior: 'smooth' });
+  });
 
 
-document.querySelector('.right-arrow').addEventListener('mousedown', () => {
-  document.querySelector('.slides').scrollBy({ left: scrollDistance, behavior: 'smooth' });
-});
+  document.querySelector('.right-arrow').addEventListener('mousedown', () => {
+    document.querySelector('.slides').scrollBy({ left: scrollDistance, behavior: 'smooth' });
+  });
 
-// 用左右鍵盤也可以滑動
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowLeft') {
-    document.querySelector('.left-arrow').click();
-  } else if (e.key === 'ArrowRight') {
-    document.querySelector('.right-arrow').click();
-  }
-});
-
+  // 用左右鍵盤也可以滑動
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      document.querySelector('.left-arrow').click();
+    } else if (e.key === 'ArrowRight') {
+      document.querySelector('.right-arrow').click();
+    }
+    });
+}
 //-------------------------------下面處理圖片跟景點名稱------------------------------------------
 let pageNumber = 0;
 let loading = false; // 用來防止重複加載
@@ -86,8 +88,6 @@ function loadFirstPage() {
     })
     .catch(error => console.log(error));
 }
-
-loadFirstPage();
 
 function search() {
   pageNumber = 0;
@@ -122,9 +122,6 @@ function checkScrollBottom() {
       });
   }
 }
-
-// 監聽滾動事件
-window.addEventListener('scroll', checkScrollBottom);
 
 function loadContent(data) {
   for (let i = 0; i < data.data.length; i++) {
@@ -201,6 +198,7 @@ let taipeiTripButton = document.querySelector(".taipei-trip");
 taipeiTripButton.addEventListener("click",() => {
     window.location.href = `/`;
 })
+
 //-------------------------------下面處理刷新時頁面沒有置頂的問題------------------------------------------
 window.setTimeout(function () {
   window.scrollTo(0, 0);
@@ -214,12 +212,28 @@ let signupResult = document.querySelector(".signup-result");
 let loginResult = document.querySelector(".login-result");
 let loginState = false;
 let logout = document.querySelector(".logout");
+let signupName;
+let signupEmail;
+let signupPwd;
+
+function isEmail(signupEmail){
+  let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(signupEmail);
+}
 
 function signup(event){
   event.preventDefault();
-  let signupName = document.querySelector(".signup-name").value;
-  let signupEmail = document.querySelector(".signup-email").value;
-  let signupPwd = document.querySelector(".signup-password").value;
+
+  signupName = document.querySelector(".signup-name").value;
+  signupEmail = document.querySelector(".signup-email").value;
+  signupPwd = document.querySelector(".signup-password").value;
+
+  if(!isEmail(signupEmail)){
+    signupResult.style.display = "block";
+    signupResult.textContent = 'Email invalid.';
+    return
+  }
+
   fetch('/api/user', {
       method: 'POST', 
       headers: {
@@ -325,46 +339,90 @@ async function user_data() {
 //---------------------------Popup Dialog------------------------------------------------------
 let loginSignupLink = document.querySelector(".login-signup");
 let popupDialog = document.querySelector(".popup-dialog");
-loginSignupLink.addEventListener("click", function(){
-  if (popupDialog.style.display === 'block'){
-    popupDialog.style.display = 'none';
-    setTimeout(() => {
-      popupDialog.classList.add("active"); 
-  }, 1000);
-  }
-  else{
-    popupDialog.style.display = 'block';
-  }
-});
 
-let closeIcon = document.querySelector(".close-icon");
-closeIcon.addEventListener("click", function(){
-  popupDialog.classList.remove("active");
-  setTimeout(() => {
-    popupDialog.style.display = 'none';
-}, 30);
-});
+function loginSignup(){
+    if (popupDialog.style.display === 'block'){
+        popupDialog.style.display = 'none';
+        setTimeout(() => {
+        popupDialog.classList.add("active"); 
+    }, 1000);
+    }
+    else{
+        popupDialog.style.display = 'block';
+}}
+  
+function closeDialog(){
+    popupDialog.classList.remove("active");
+    setTimeout(() => {
+        popupDialog.style.display = 'none';
+    }, 30);
+}
 
 let switchToLogin = document.querySelector(".switch-to-login");
 let loginArea = document.querySelector(".login-area");
 let signupArea = document.querySelector(".signup-area");
-switchToLogin.addEventListener("click", function(){
-  signupArea.style.display = "none";
-  loginArea.style.display = "block";
-})
 
-let switchToSignup = document.querySelector(".switch-to-signup");
-switchToSignup.addEventListener("click", function(){
-  signupArea.style.display = "block";
-  loginArea.style.display = "none";
-})
+function toLogin(){
+    signupArea.style.display = "none";
+    loginArea.style.display = "block";
+}
 
-//------------------------重載頁面後獲取用戶訊息-----------------------------------
-document.addEventListener("DOMContentLoaded", function() {
+function toSignup(){
+    signupArea.style.display = "block";
+    loginArea.style.display = "none";
+}
+
+function toLogout(){
+    localStorage.removeItem('accessToken');
+    window.location.reload();
+}
+
+function initialize(){
+  mrtInfo();
+  scroll();
+  loadFirstPage();
+  window.addEventListener('scroll', checkScrollBottom);
   user_data();
-});
+}
 
-logout.addEventListener("click", function(){
-  localStorage.removeItem('accessToken');
-  window.location.reload();
-});
+initialize();
+
+//------------------------Check login state-----------------------
+
+//----------------------booking system------------------------------
+function getDate(){
+  let today = new Date();
+  let year = today.getFullYear();
+  let month = String(today.getMonth() + 1).padStart(2, '0');
+  let day = String(today.getDate()).padStart(2, '0');
+  let formattedDate = `${year}-${month}-${day}`;
+  return formattedDate
+}
+
+let submitButton = document.querySelector(".submit-button");
+function bookingButton() {
+  let today = getDate();
+  
+  fetch("/api/booking", {
+      method: "POST",
+      headers: {
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({ "attractionId": turist_id, "date": today, "time": selectedTime, "price": selectedPrice })
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => {
+      console.error('Error:', error);
+      popupDialog.style.display = 'block';});
+}
+
+function schedule(){
+  if (loginState){
+      window.location.href = "/booking";
+  }
+  else if(loginState ===false){
+      loginSignup();
+  }
+}

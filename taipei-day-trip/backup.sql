@@ -16,6 +16,64 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `booking`
+--
+
+DROP TABLE IF EXISTS `booking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `booking` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `attractionId` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `time` varchar(20) DEFAULT NULL,
+  `price` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `attractionId` (`attractionId`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`attractionId`) REFERENCES `turist_spot` (`id`),
+  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `booking`
+--
+
+LOCK TABLES `booking` WRITE;
+/*!40000 ALTER TABLE `booking` DISABLE KEYS */;
+INSERT INTO `booking` VALUES (1,5,24,'2024-06-25','morning',2000),(2,1,27,'2024-06-24','morning',2000),(3,6,27,'2024-06-24','afternoon',2500),(4,6,27,'2024-06-24','morning',2000);
+/*!40000 ALTER TABLE `booking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `member`
+--
+
+DROP TABLE IF EXISTS `member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `member` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member`
+--
+
+LOCK TABLES `member` WRITE;
+/*!40000 ALTER TABLE `member` DISABLE KEYS */;
+INSERT INTO `member` VALUES (23,'ashown','ashown','123'),(24,'test','test','test'),(25,'yoo','yooo@gmail.com','123'),(26,'yoo','yoooo@gmail.com','123'),(27,'hi','hi@gmail.com','hi');
+/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `turist_spot`
 --
 
@@ -84,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-13  9:50:21
+-- Dump completed on 2024-06-25 13:07:07

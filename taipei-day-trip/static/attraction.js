@@ -122,28 +122,32 @@ async function carouselIndicators(item, bookingImageContainer) {
     }
 }
 
+let selectedTime;
+let selectedPrice;
 function changePrice() {
     const prices = {
         morning: 2000,
         afternoon: 2500
     };
 
-    const timeRadios = document.querySelectorAll('input[name="time"]');
-    const priceDiv = document.querySelector('.price');
+    let timeRadios = document.querySelectorAll('input[name="time"]');
+    let priceDiv = document.querySelector('.price');
 
     for (let radio of timeRadios) {
         radio.addEventListener('change', function() {
             console.log(this); 
-            const selectedPrice = prices[this.value];
+            selectedTime = this.value;
+            selectedPrice = prices[this.value];
             priceDiv.textContent = `新台幣 ${selectedPrice} 元`;
         });
-    }
-
-    let taipeiTripButton = document.querySelector(".taipei-trip");
-    taipeiTripButton.addEventListener("click", () => {
-        window.location.href = `/`;
-    });
+    }  
+    //return {"time": selectedTime, "price": selectedPrice};
 }
+
+let taipeiTripButton = document.querySelector(".taipei-trip");
+    taipeiTripButton.addEventListener("click", () => {
+    window.location.href = `/`;
+});
 
 async function initialize() {
     const item = await get(url);
@@ -152,21 +156,41 @@ async function initialize() {
     await attractionContent(item);
     await carouselIndicators(item, bookingImageContainer);
     changePrice();
+    user_data();
 }
 
 initialize();
 
 //-------------------------------Login/Signup section----------------------------------------------------
+//import { signup, login, toLogout, user_data, isEmail } from "./login_signup_module.js";
+//import {isEmail} from "./login_signup_module.js";
+
 let signupResult = document.querySelector(".signup-result");
 let loginResult = document.querySelector(".login-result");
 let loginState = false;
 let logout = document.querySelector(".logout");
+let signupName;
+let signupEmail;
+let signupPwd;
+
+function isEmail(signupEmail){
+  let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(signupEmail);
+}
 
 function signup(event){
   event.preventDefault();
-  let signupName = document.querySelector(".signup-name").value;
-  let signupEmail = document.querySelector(".signup-email").value;
-  let signupPwd = document.querySelector(".signup-password").value;
+
+  signupName = document.querySelector(".signup-name").value;
+  signupEmail = document.querySelector(".signup-email").value;
+  signupPwd = document.querySelector(".signup-password").value;
+
+  if(!isEmail(signupEmail)){
+    signupResult.style.display = "block";
+    signupResult.textContent = 'Email invalid.';
+    return
+  }
+
   fetch('/api/user', {
       method: 'POST', 
       headers: {
@@ -240,7 +264,7 @@ function login(event){
   });
 }
 
-//let accessToken = localStorage.getItem('accessToken');
+let accessToken = localStorage.getItem('accessToken');
 async function user_data() {
   let accessToken = localStorage.getItem('accessToken');
   try {
@@ -272,46 +296,106 @@ async function user_data() {
 //---------------------------Popup Dialog------------------------------------------------------
 let loginSignupLink = document.querySelector(".login-signup");
 let popupDialog = document.querySelector(".popup-dialog");
-loginSignupLink.addEventListener("click", function(){
-  if (popupDialog.style.display === 'block'){
-    popupDialog.style.display = 'none';
-    setTimeout(() => {
-      popupDialog.classList.add("active"); 
-  }, 1000);
-  }
-  else{
-    popupDialog.style.display = 'block';
-  }
-});
 
-let closeIcon = document.querySelector(".close-icon");
-closeIcon.addEventListener("click", function(){
-  popupDialog.classList.remove("active");
-  setTimeout(() => {
-    popupDialog.style.display = 'none';
-}, 30);
-});
+function loginSignup(){
+    if (popupDialog.style.display === 'block'){
+        popupDialog.style.display = 'none';
+        setTimeout(() => {
+        popupDialog.classList.add("active"); 
+    }, 1000);
+    }
+    else{
+        popupDialog.style.display = 'block';
+}}
+  
+function closeDialog(){
+    popupDialog.classList.remove("active");
+    setTimeout(() => {
+        popupDialog.style.display = 'none';
+    }, 30);
+}
 
 let switchToLogin = document.querySelector(".switch-to-login");
 let loginArea = document.querySelector(".login-area");
 let signupArea = document.querySelector(".signup-area");
-switchToLogin.addEventListener("click", function(){
-  signupArea.style.display = "none";
-  loginArea.style.display = "block";
-})
 
-let switchToSignup = document.querySelector(".switch-to-signup");
-switchToSignup.addEventListener("click", function(){
-  signupArea.style.display = "block";
-  loginArea.style.display = "none";
-})
+function toLogin(){
+    signupArea.style.display = "none";
+    loginArea.style.display = "block";
+}
 
-//------------------------重載頁面後獲取用戶訊息-----------------------------------
-document.addEventListener("DOMContentLoaded", function() {
-  user_data();
+function toSignup(){
+    signupArea.style.display = "block";
+    loginArea.style.display = "none";
+}
+
+function toLogout(){
+    localStorage.removeItem('accessToken');
+    window.location.reload();
+}
+
+//----------------------booking system------------------------------
+document.getElementById('date').addEventListener('input', function() {
+    let selectedDate = new Date(this.value);
+    let today = new Date();
+    if (selectedDate < today) {
+        alert('請選擇今天或之後的日期。');
+        this.value = ''; 
+    }
 });
 
-logout.addEventListener("click", function(){
-  localStorage.removeItem('accessToken');
-  window.location.reload();
-})
+function getDate(){
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = String(today.getMonth() + 1).padStart(2, '0');
+    let day = String(today.getDate()).padStart(2, '0');
+    let formattedDate = `${year}-${month}-${day}`;
+    return formattedDate
+}
+
+let submitButton = document.querySelector(".submit-button");
+function bookingButton() {
+    if (loginState){
+        let today = getDate();
+        fetch("/api/booking", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ "attractionId": turist_id, "date": today, "time": selectedTime, "price": selectedPrice })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (loginState){
+                if(!turist_id||!selectedTime||!selectedPrice){
+                    return false;
+                }
+                else{
+                    window.location.href = "/booking";
+                }
+            }    
+            else if(loginState ===false){
+                loginSignup();
+            }
+
+            window.location.href = "/booking";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    else if(loginState ===false){
+        loginSignup();
+    }
+}
+
+function schedule(){
+    if (loginState){
+        window.location.href = "/booking";
+    }
+    else if(loginState ===false){
+        loginSignup();
+    }
+}

@@ -1,0 +1,510 @@
+.navibar {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    margin: 5px; 
+    max-width: 1200px;
+    height: 54px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.taipei-trip {
+    margin-right: auto;
+    display: flex;
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: 700;
+    color: #448899;
+    font-family: "Noto Sans TC", sans-serif;
+    float: left;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.form-header, .form-group1 > div, .form-group2 > div, .form-group3 > div {
+    font-weight: 700;
+}
+
+.menu:hover , .mrtBox:hover, .catBox:hover, .picture-container:hover, 
+.attraction-left-arrow:hover, .attraction-right-arrow:hover, .calendar-button:hover,
+.submit-button:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.footer {
+    width: 100%;
+    height: 104px;
+    background-color: #757575;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content-container {
+    width: 234px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content {
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    text-align: left;
+    color: #FFFFFF;
+    width: 234px;
+    height: 14px;
+    top: 5px;
+}
+
+.menu {
+    height: 14px;
+    font-size: 16px; 
+    display: block;
+    flex: auto;
+    align-self: center;
+    font-family: "Noto Sans TC", sans-serif;
+    font-weight: 500;
+    color: #666666;
+    line-height: 13.3px;
+    text-align: center;
+}
+
+.menu-bar {
+    margin-left: auto;
+    display: flex; 
+    width: 175px; 
+    height: 34px; 
+    align-items: center;
+    float: right;
+}
+
+.popup-dialog {
+    display: none;
+    width: 340px;
+    height: auto;
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 6px;
+    transition: max-height 0.3s ease-in-out; 
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 60px 0px #AAAAAA;
+    z-index: 9999;
+}
+
+.popup-dialog.active { 
+    height: auto;
+}
+
+.popup-dialog-header{
+    width: 340px;
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-top-left-radius: 6px; 
+    border-top-right-radius: 6px;
+}
+
+.login-signup-container{
+    width: 310px;
+    height: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-area, .signup-area{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.popup-dialog-header-content{
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+    color: #666666;
+    height: 27px;
+
+}
+
+.login-email, .login-password, .signup-name, .signup-email, .signup-password, .login-area button, .signup-area button, .signup-bottom-message{
+    margin-top: 10px;
+    height: 47px;
+    max-width: 310px;
+    width: 100%;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.login-email, .login-password, .signup-name, .signup-email, .signup-password, .signup-bottom-message{
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 13.3px;
+    text-align: left;
+    color: #757575;
+}
+
+.login-result, .signup-result{
+    display: none;
+    height: 22px;
+    align-items: center;
+    justify-content: center; 
+    margin-top: 10px;
+    color: rgba(255, 55, 0, 0.956);
+}
+
+.switch-to-login, .switch-to-signup {
+    height: 22px;
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    margin-top: 10px;
+    color: #666666;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 13.3px;
+    text-align: center;
+}
+
+.login-area button, .signup-area button{
+    width: 100%;
+    height: 47px;
+    padding: 10px 20px 10px 20px;
+    border-radius: 5px;
+    background-color: #448899;
+    border: none;
+    color: #FFFFFF;
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: center;
+}
+
+.close-icon{
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 10px;
+}
+
+.close-icon:hover, .switch-to-login:hover, .switch-to-signup:hover, .login-area button:hover, .signup-area button:hover, .logout:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.logout{
+    display: none;
+}
+
+.greeting, .contact-info-title{
+    width: 1000px;
+    height: 27px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: left;
+    color: #666666;
+}
+
+.booking-attraction-container{
+    width: 980px;
+    height: 200px;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+}
+
+.icon-delete-container{
+    width: 100%;
+}
+
+.icon-delete{
+    background-image: url("/static/icon_delete.png");
+    width: 30px;
+    height: 30px;
+    float: right;
+}
+
+.image{
+    height: 200px;
+    width: 250px;
+    background-size: cover;
+}
+
+.infors{
+    margin-left: 30px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+}
+
+.infors-line1, .name{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    text-align: left;
+    color: #448899;
+    height: 24px;
+    align-items: center;
+    display: flex;
+}
+
+.name{
+    margin-left: 5px;
+}
+
+.infors-line2, .infors-line3, .infors-line4, .infors-line5{
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    text-align: left;
+    color: #666666;
+    display: flex;
+    align-items: center;
+}
+
+.date, .time, .price, .address{
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+hr{
+    margin-top: 40px; 
+    margin-bottom: 40px; 
+    max-width: 1200px; 
+    width: 90%;
+    border: 1px solid #E8E8E8;
+}
+
+.contact-info-title, .payment-info-title{
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: left;
+    color: #666666;
+}
+.contact-infor-container, .payment-container, .total-price-container{
+    width: 980px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contact-line1, .contact-line2, .contact-line3{
+    margin-top: 20px;
+    height: 38px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 13.3px;
+    text-align: left;
+    color: #666666;
+    margin-left: 5px;
+}
+
+.contact-name, .contact-email, .contact-number, .card-number, .card-date, .card-cvc{
+    height: 38px;
+    width: 200px;
+    gap: 4px;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+}
+
+.total-price-line1{
+    height: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    color: #666666;
+}
+
+.submit-button {
+    width: auto;
+    height: 36px;
+    align-content: center;
+    border-radius: 5px;
+    background-color: #448899;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: center;
+    margin-top: 25px;
+    margin-left: 20px;
+    border: none;
+    padding: 10px 20px 10px 20px;
+}
+
+.submit-button:hover, .icon-delete:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.total-price-container{
+    text-align: right;
+    width: 980px;
+    height: 100px;
+    margin-bottom: 40px;
+}
+
+.remind{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 13.3px;
+    text-align: left;
+    color: #666666;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.footer{
+    width: 100%;
+    height: 104px;
+    background-color: #757575;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content-container{
+    width: 234px;
+    height:24px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content{
+    font-family:"Noto Sans TC", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    text-align: left;
+    color: #FFFFFF;
+    width: 234px;
+    height: 14px;
+    top: 5px;
+}
+
+.top-hr{
+    max-width: 100%; 
+    width: 100%;
+    margin-top: 0px; 
+    box-sizing: border-box;
+}
+
+
+body {
+    margin:0px;
+    font-family:"Noto Sans TC", sans-serif;
+}
+
+@media(max-width:1200px){
+    .greeting, .remind, .booking-attraction-container, .contact-infor-container, 
+    .payment-container, .total-price-container, hr{
+        max-width: 90%;
+    }
+
+    .contact-info-title{
+        width: auto;
+    }
+
+    .top-hr{
+        width: 100%; 
+        margin-top: 0px; 
+        box-sizing: border-box;
+    }
+}
+
+@media(max-width:1000px){
+    /*.greeting, .remind, .booking-attraction-container, .contact-infor-container, .payment-container, .total-price-container, hr{
+        max-width: 100%;
+        width: 100%;
+    }*/
+}
+
+@media(max-width:900px){
+    .booking-attraction-container{
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .image{
+        width: 100%;
+        height: 450px;
+        background-size: cover;
+    }
+
+    .infors, .contact-infor-container, .payment-container, .total-price-container{
+        margin-top: 30px;
+        margin-left: 0px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    hr{
+        margin-top: 30px;
+        margin-bottom: 40px;
+    }
+
+    .icon-delete-container{
+        width: 100%;
+    }
+
+    .icon-delete{
+        float: right;
+    }
+
+    .contact-info-title{
+        line-height: 23.17px;
+        margin-top: 20px;
+        height: auto;
+        font-size: 16px;
+    }
+
+    .contact-line1, .contact-line2, .contact-line3{
+        margin-top: 15px;
+    }
+}
+
+@media(max-width:500px){
+    .booking-attraction-container{
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .image{
+        width: 100%;
+        height: 200px;
+        background-size: cover;
+    }
+}
