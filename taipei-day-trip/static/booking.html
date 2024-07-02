@@ -32,7 +32,7 @@
               <input type = "password" name = "login-password" class = "login-password" placeholder = "輸入密碼">
               <br>
               <button type = "submit">登入帳戶</button>
-              <dic class = "login-result"></dic>
+              <div class = "login-result"></div>
               <div class = "switch-to-signup" onclick = "toSignup()">還沒有帳戶?點此註冊</div>
           </form>
       </div>
@@ -44,7 +44,7 @@
               <input type = "password" name = "signup-password" class = "signup-password" placeholder = "輸入密碼">
               <br>
               <button type = "submit">註冊新帳戶</button>
-              <dic class = "signup-result"></dic>
+              <div class = "signup-result"></div>
               <div class = "switch-to-login" onclick = "toLogin()">已經有帳戶了?點此登入</div>
           </form>
       </div>
@@ -71,17 +71,28 @@
     <div class = "contact-info-title">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
   </div>
   <hr>
-  <div class = "payment-container">
-    <div class = "payment-info-title">信用卡付款資訊</div>
-    <div class = "contact-line1">卡片號碼: <input type = "text" name = "card-number" class = "card-number" placeholder = "**** **** **** ****"></div>
-    <div class = "contact-line2">過期時間: <input type = "text" name = "card-date" class = "card-date" placeholder = "MM/YY"></div>
-    <div class = "contact-line3">驗證密碼: <input type = "text" name = "card-cvc" class = "card-cvc" part="CVV"></div>
-  </div>
-  <hr>
-  <div class = "total-price-container">
-    <div class = "total-price-line1">總價: <span class = "total-price"></span></div>
-    <button class="submit-button" onclick = "comfirmPay()">確認訂購並付款</button>
-  </div>
+  <form>
+    <div class="payment-container">
+      <div class="payment-info-title">信用卡付款資訊</div>
+      <div class="form-group card-number-group">
+        <label for="card-number" class="control-label">卡片號碼:</label>
+        <div class="form-control card-number"></div>
+      </div>
+      <div class="form-group expiration-date-group">
+        <label for="expiration-date" class="control-label">過期時間:</label>
+        <div class="form-control expiration-date" id="tappay-expiration-date"></div>
+      </div>
+      <div class="form-group ccv-group">
+        <label for="ccv" class="control-label">驗證密碼:</label>
+        <div class="form-control ccv"></div>
+      </div>
+    </div>
+    <hr>
+    <div class="total-price-container">
+      <div class="total-price-line1">總價: <span class="total-price"></span></div>
+      <button type="button" class="submit-button" onclick="comfirmPay(event)">確認訂購並付款</button>
+    </div>
+  </form>
 </div>
 <div class = "footer">
   <div class = "footer-content-container">
@@ -89,5 +100,6 @@
   </div>
 </div>
 <script src = "/static/booking.js" defer></script>
+<script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
 </body>
 </html>

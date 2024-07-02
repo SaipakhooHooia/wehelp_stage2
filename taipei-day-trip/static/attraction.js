@@ -13,16 +13,60 @@ async function get(url) {
         window.location.href = `/`;
     }
 }
+
+/*
 async function placeImg(item) {
     let bookingContainer = document.querySelector(".booking-container");
     let bookingImageContainer = document.querySelector(".booking-image-container");
     let contentContainer = document.querySelector(".attraction-content-container");
+
+    const imageUrl = item.images;
+    const regex = /https:\/\/.*?\.jpg/gi;
+    const match = regex.exec(imageUrl);
+    if (match) {
+        const firstMatch = match[0];
+        const img = new Image();
+        img.src = firstMatch;
+        await new Promise((resolve) => {
+        img.onload = resolve;
+        });
+        // 在這裡可以使用預先載入的圖片
+        // 例如，您可以將圖片添加到DOM中或使用它進行其他操作
+        console.log("Image loaded:", firstMatch);
+    }
     for (let i = 0; i < item.images.length; i++) {
         let bookingImage = document.createElement("div");
         bookingImage.className = "booking-image";
         bookingImage.style.backgroundImage = "url(" + item.images[i] + ")";
         bookingImageContainer.appendChild(bookingImage);
     }
+    bookingContainer.appendChild(contentContainer);
+    return bookingImageContainer;
+}*/
+
+//-------------------試使用預先載入的圖片-------------------
+async function placeImg(item) {
+    let bookingContainer = document.querySelector(".booking-container");
+    let bookingImageContainer = document.querySelector(".booking-image-container");
+    let contentContainer = document.querySelector(".attraction-content-container");
+
+    const imageUrls = item.images.map(url => new URL(url).href);
+    const images = await Promise.all(imageUrls.map(async url => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+        });
+    }));
+
+    images.forEach((img, index) => {
+        let bookingImage = document.createElement("div");
+        bookingImage.className = "booking-image";
+        bookingImage.style.backgroundImage = `url(${img.src})`;
+        bookingImageContainer.appendChild(bookingImage);
+    });
+
     bookingContainer.appendChild(contentContainer);
     return bookingImageContainer;
 }

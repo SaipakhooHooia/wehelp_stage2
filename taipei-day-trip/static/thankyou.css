@@ -381,6 +381,28 @@ body {
 
 
 @media(max-width:900px){
+    .booking-container, .infors{
+        max-width: 1000px;
+        width: auto;
+        height:auto;
+        margin-top: 0px;
+        margin-left: 10px;
+        margin-right: 10px;
+        transform: none;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .booking-image-container{
+        max-width: 600px;
+        width: auto;
+    }
+
+    .booking-image{
+        width: 600px;
+    }
+
     .infors{
         margin-top: 40px;
         margin-bottom: 40px;

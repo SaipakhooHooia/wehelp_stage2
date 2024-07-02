@@ -13,7 +13,7 @@ function mrtInfo(){
         slide.addEventListener('click', function () {
           pageNumber = 0;
           document.querySelector(".pic_list").innerHTML = "";
-          image_url = [];
+          //image_url = [];
           turist_spot = [];
           keyword = station;
           url = buildUrl(pageNumber);
@@ -61,7 +61,7 @@ function scroll(){
 let pageNumber = 0;
 let loading = false; // 用來防止重複加載
 let keyword = document.getElementsByClassName("searchbar")[0].value;
-let image_url = [];
+//let image_url = [];
 let turist_spot = [];
 let hasMorePages = true;
 
@@ -93,7 +93,7 @@ function search() {
   pageNumber = 0;
   keyword = document.getElementsByClassName("searchbar")[0].value;
   document.querySelector(".pic_list").innerHTML = "";
-  image_url = [];
+  //image_url = [];
   turist_spot = [];
   hasMorePages = true;
   loadFirstPage(); 
@@ -118,7 +118,7 @@ function checkScrollBottom() {
       })
       .catch(error => console.error('Error:', error))
       .finally(() => {
-        loading = false; // 無論加載成功或失敗，都將加載標誌設置回 false
+        loading = false; 
       });
   }
 }
@@ -135,7 +135,9 @@ function loadContent(data) {
     let match = regex.exec(item.images);
     if (match) {
       let firstMatch = match[0];
-      image_url.push(firstMatch);
+      //image_url.push(firstMatch);
+      let img = new Image();
+      img.src = firstMatch;
       picture.style.backgroundImage = 'url(' + firstMatch + ')';
     }
 
@@ -184,10 +186,10 @@ function loadContent(data) {
     });
   }
 
-  for (let i = 0; i < image_url.length; i++) {
+  /*for (let i = 0; i < image_url.length; i++) {
     let container = document.querySelectorAll(".pic_list .picture")[i];
     container.style.backgroundImage = 'url(' + image_url[i] + ')' || '';
-  }
+  }*/
   for (let i = 0; i < turist_spot.length; i++) {
     let element = document.querySelectorAll('.pic_list .title')[i];
     element.textContent = turist_spot[i] || '';

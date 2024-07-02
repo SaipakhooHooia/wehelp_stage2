@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mysql.connector.pooling import MySQLConnectionPool
 import jwt
 from datetime import datetime
+import httpx
 
 app=FastAPI()
 
@@ -406,12 +407,13 @@ async def create_booking(booking: BookingRequest, db_conn=Depends(get_db_conn), 
             update_sql = """
             UPDATE `website`.`booking`
             SET attractionId = %s, date = %s, time = %s, price = %s
-            WHERE user_id = %s AND id = %s
+            WHERE user_id = %s
             """
-            for booking_id in existing_bookings:
-                val = (booking.attractionId, booking.date, booking.time, booking.price, user_id, booking_id[0])
-                mycursor.execute(update_sql, val)
-
+            #for booking_id in existing_bookings:
+            val = (booking.attractionId, booking.date, booking.time, booking.price, user_id)
+            print("update data=",booking.attractionId, booking.date, booking.time, booking.price, user_id)
+            mycursor.execute(update_sql, val)
+            connection.commit()
             result = Correct_message(ok=True)
             return result
         else:
@@ -436,3 +438,136 @@ async def delete_booking(db_conn = Depends(get_db_conn), authorization: str = He
             connection.commit()
     except HTTPException as e:
         return e
+
+class userData(BaseModel):
+    name: str
+    email: str
+    phone: str
+class tripContent(BaseModel):
+    attraction: AttractionInfo
+    date: str
+    time: str
+class orderContent(BaseModel):
+    price: int
+    trip: tripContent
+    contact: userData
+class orderRequest(BaseModel):
+    prime: str
+    order: orderContent
+
+class orderSuccess(BaseModel):
+    number: int
+    payment: dict
+
+@app.post("/api/orders")
+async def order(orders: orderRequest, db_conn = Depends(get_db_conn), authorization: str = Header(...)):
+    mycursor, connection = db_conn
+    token = get_token_authorization(authorization)
+    try:
+        if token:
+            user_id = token["id"]
+            sql = "INSERT INTO `website`.`orders` (prime, price, attractionId, date, time, name, email, phone) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (orders.prime, orders.order.price, orders.order.trip.attraction.id, orders.order.trip.date, 
+                orders.order.trip.time, orders.order.contact.name, orders.order.contact.email, orders.order.contact.phone)
+            mycursor.execute(sql, val)
+            connection.commit()
+            partner_key = "partner_E4p9DMKDfKDeb5CdyRbADrzsgVcNJ9FJFEilR5RDgwt66W6qjteAYPy8"
+            merchant_id = "tppf_MidoriTapPay_GP_POS_3"
+            result_url = "http://3.90.232.77:8000/api/orders"
+
+            select_sql = "SELECT id FROM `website`.`orders` WHERE prime = %s"
+            val = (orders.prime,)
+            mycursor.execute(select_sql, val)
+            order_id = mycursor.fetchone()[0]
+
+            payload = {
+            "prime": orders.prime,
+            "partner_key": partner_key,
+            "merchant_id": merchant_id,
+            "amount": orders.order.price,
+            "order_number": str(order_id),
+            "bank_transaction_id": str(order_id),  
+            "details": "ATM",
+            #"three_domain_secure": True,
+            "cardholder": {
+                "phone_number": orders.order.contact.phone,
+                "name": orders.order.contact.name,
+                "email": orders.order.contact.email
+            },
+            "result_url": {
+                "backend_notify_url": result_url
+            },
+            "expire_in_days": 1
+            }
+
+            headers = {
+                "Content-Type": "application/json",
+                "x-api-key": partner_key
+            }
+
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",
+                    json=payload,
+                    headers=headers
+                )
+            response_data = response.json()
+        if response_data.get("status") == 0:
+            sql = "UPDATE `website`.`orders` SET is_paid = %s, payment_result = %s WHERE prime = %s"
+            val = (True, response_data["status"], orders.prime)
+            mycursor.execute(sql, val)
+            connection.commit()
+
+            delete_sql = "DELETE FROM `website`.`booking` WHERE user_id = %s"
+            val = (user_id,)
+            mycursor.execute(delete_sql, val)
+            connection.commit()
+            result = orderSuccess(number = order_id, payment = {"status": response_data["status"],"message": "付款成功", "number":order_id})
+            return Response_model(data = result)
+        else:
+            sql = "UPDATE `website`.`orders` SET is_paid = %s, payment_result = %s WHERE prime = %s"
+            val = (False, response_data["status"], orders.prime)
+            mycursor.execute(sql, val)
+            connection.commit()
+            raise HTTPException(status_code=400, detail=Error_message(error=True, message=response_data["msg"]).model_dump())
+        
+    except HTTPException as e:
+        return e
+
+class orderSearch(BaseModel):
+    number:int
+    price: int
+    trip: dict
+    contact: dict
+    status: int
+
+@app.get("/api/orders/{orderNumber}")
+async def order(orderNumber: int = Path(...), db_conn = Depends(get_db_conn), authorization: str = Header(...)):
+    mycursor, connection = db_conn
+    token = get_token_authorization(authorization)
+    try:
+        if token:
+            sql = "SELECT price, attractionId, date, time, name, email, phone, payment_result FROM website.orders WHERE id = %s"
+            val = (orderNumber,)
+            mycursor.execute(sql, val)
+            row = mycursor.fetchone()
+
+            sql2 = "SELECT name, address, image FROM website.turist_spot WHERE id = %s"
+            val2 = (row[1],)
+            mycursor.execute(sql2, val2)
+            row2 = mycursor.fetchone()
+
+            if row:
+                result = orderSearch(
+                    number = orderNumber,
+                    price = row[0],
+                    trip = {"attraction": {"id": row[1], "name": row2[0], "address": row2[1], "image": row2[2]}, "date": row[2], "time": row[3]},
+                    contact = {"name": row[4], "email": row[5], "phone": row[6]},
+                    status = row[7]
+                )
+                return Response_model(data = result)
+            else:
+               raise HTTPException(status_code=500, detail=Error_message(error=True, message="Search id out of range.").model_dump())  
+    except HTTPException as e:
+        return e
+            
