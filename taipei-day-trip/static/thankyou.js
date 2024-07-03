@@ -1,41 +1,23 @@
-let page_url = window.location.href;
-let turist_id = page_url.split('/').pop(); 
-console.log('turist_id:', turist_id);
-let url =`/api/attraction/${turist_id}`;
-
-let selectedTime;
-let selectedPrice;
-function changePrice() {
-    const prices = {
-        morning: 2000,
-        afternoon: 2500
-    };
-
-    let timeRadios = document.querySelectorAll('input[name="time"]');
-    let priceDiv = document.querySelector('.price');
-
-    for (let radio of timeRadios) {
-        radio.addEventListener('change', function() {
-            console.log(this); 
-            selectedTime = this.value;
-            selectedPrice = prices[this.value];
-            priceDiv.textContent = `新台幣 ${selectedPrice} 元`;
-        });
-    }  
-    //return {"time": selectedTime, "price": selectedPrice};
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);//搜尋從問號開始的部分
+    return urlParams.get(param);
 }
 
-let taipeiTripButton = document.querySelector(".taipei-trip");
-    taipeiTripButton.addEventListener("click", () => {
-    window.location.href = `/`;
-});
+const orderId = getQueryParam('number');
+let orderIdContainer = document.querySelector('.order-id');
 
-async function initialize() {
-    changePrice();
-    user_data();
-}
-
-initialize();
+let accessToken = localStorage.getItem('accessToken');
+fetch(`/api/orders/${orderId}`,{
+    method:"GET",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+      }
+})
+.then(responce => responce.json())
+.then(data => {
+    orderIdContainer.textContent = orderId;
+})
 
 //-------------------------------Login/Signup section----------------------------------------------------
 let signupResult = document.querySelector(".signup-result");
@@ -137,7 +119,6 @@ function login(event){
   });
 }
 
-let accessToken = localStorage.getItem('accessToken');
 let greeting = document.querySelector(".greeting");
 let contactName = document.querySelector(".contact-name");
 let contactEmail = document.querySelector(".contact-email");
@@ -218,7 +199,14 @@ function toLogout(){
     localStorage.removeItem('accessToken');
     window.location.href = "/";
 }
-
+//-------------------------------Footer section----------------------------------------------------
+let body = document.querySelector("body");
+/*function setFooterHeight() {
+    let footer = document.querySelector(".footer");
+    const viewportHeight = window.innerHeight;
+    footer.style.height = viewportHeight - 206.3 + "px";
+}
+setFooterHeight();*/
 //----------------------booking system------------------------------
 let bookingData = null;
 function booking(){
@@ -291,32 +279,13 @@ function getDate(){
 let submitButton = document.querySelector(".submit-button");
 
 function schedule(){
-    if (loginState){
+    if (accessToken){
         window.location.href = "/booking";
         booking(); 
     }
-    else if(loginState ===false){
+    else if(accessToken ===false){
         loginSignup();
     }
-}
-
-//-------------------------------Delete section----------------------------------------------------
-let deleteIcon = document.querySelector(".icon-delete");
-
-function deleteBooking(){
-    fetch('/api/booking', {
-        method: "DELETE",
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json', 
-          }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        window.location.reload();
-    })
-    .catch(error => console.log(error))
 }
 
 function noSchedule(){
@@ -324,134 +293,41 @@ function noSchedule(){
     bookingContainer.style.display = "none";
 }
 
-//-------------------------------GetPrime section----------------------------------------------------
-let APP_ID = 151667;
-let APP_KEY = "app_w9o9z86GgK37YgOsND8SbZ9qiiScnUNOAYPCx6Gi4LaBZQzOAJQ8NtMYvxRr";
-TPDirect.setupSDK(APP_ID, APP_KEY, "sandbox");
+async function initialize() {
+    user_data();
+}
 
-TPDirect.card.setup({
-    fields: {
-    number: {
-        element: '.form-control.card-number',
-        placeholder: '**** **** **** ****'
-    },
-    expirationDate: {
-        element: document.getElementById('tappay-expiration-date'),
-        placeholder: 'MM / YY'
-    },
-    ccv: {
-        element: '.form-control.ccv',
-        placeholder: 'CCV'
-    }
-    },
-    styles: {
-    'input': {
-          'color': 'gray'
-    },
-    'input.ccv': {
-        // 'font-size': '16px'
-    },
-    ':focus': {
-        'color': 'black'
-    },
-    '.valid': {
-        'color': 'green'
-    },
-    '.invalid': {
-        'color': 'red'
-    },
-    '@media screen and (max-width: 400px)': {
-        'input': {
-        'color': 'orange'
-        }
-    }
-    },
-    isMaskCreditCardNumber: true,
-    maskCreditCardNumberRange: {
-        beginIndex: 6, 
-        endIndex: 11
-    }
-});
-/*
-TPDirect.card.onUpdate(function (update) {
-    if (update.canGetPrime) {
-    $('button[type="submit"]').removeAttr('disabled');
-    } else {
-    $('button[type="submit"]').attr('disabled', true);
-    }
+initialize();
 
-    var newType = update.cardType === 'unknown' ? '' : update.cardType;
-    $('#cardtype').text(newType);
-
-    if (update.status.number === 2) {
-        setNumberFormGroupToError('.card-number-group');
-      } else if (update.status.number === 0) {
-        setNumberFormGroupToSuccess('.card-number-group');
-      } else {
-        setNumberFormGroupToNormal('.card-number-group');
+async function user_data() {
+  let accessToken = localStorage.getItem('accessToken');
+  try {
+    let response = await fetch('/api/user/auth', {
+      method: 'GET', 
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json', 
       }
+    });
 
-      if (update.status.expiry === 2) {
-        setNumberFormGroupToError('.expiration-date-group');
-      } else if (update.status.expiry === 0) {
-        setNumberFormGroupToSuccess('.expiration-date-group');
-      } else {
-        setNumberFormGroupToNormal('.expiration-date-group');
-      }
-
-      if (update.status.ccv === 2) {
-        setNumberFormGroupToError('.ccv-group');
-      } else if (update.status.ccv === 0) {
-        setNumberFormGroupToSuccess('.ccv-group');
-      } else {
-        setNumberFormGroupToNormal('.ccv-group');
-      }
-    });*/
-
-let orderId = null;
-function comfirmPay() {
-    let phoneNumber = document.querySelector(".contact-number").value;
-    //console.log('Phone number:', phoneNumber);
-      TPDirect.card.getPrime(function (result) {
-        if (result.status !== 0) {
-          alert('卡片資訊錯誤');
-          return false;
-        }
-        let prime = result.card.prime;
-        //alert('getPrime 成功: ' + prime);
-        fetch("/api/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${accessToken}`
-          },
-          body: JSON.stringify({
-            "prime": prime, 
-            "order":{
-                "price": bookingData.price, 
-                "trip": {
-                    "attraction":{
-                        "id": bookingData.attraction.id, 
-                        "name": bookingData.attraction.name, 
-                        "address": bookingData.attraction.address, 
-                        "image": bookingData.attraction.image},
-                    "date": bookingData.date, 
-                    "time": bookingData.time},
-                "contact":{
-                    "name": userData.name, 
-                    "email": userData.email, 
-                    "phone": phoneNumber}
-        }})
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.data.payment.status === 0) {
-                orderId = data.data.number;
-                window.location.href = `/thankyou?number=${orderId}`;
-            }
-            else{
-                alert(`Payment failed: ${data.data.payment.message}`);
-            }
-        })
-      });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    let data = await response.json();
+    loginState = true;
+    console.log(data);
+    if (loginState) {
+      logout.style.display = "block";
+      loginSignupLink.style.display = "none";
+      userName = data.name;
+      greeting.textContent = `您好， ${data.name}，待預定的行程如下:`;
+      contactName.value = data.name;
+      contactEmail.value = data.email;
+      userData = data;
+    }
+  } 
+  catch (error) {
+    console.error('There was a problem with your fetch operation:', error);
+    loginState = false;
+  }
 }
